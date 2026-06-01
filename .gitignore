@@ -1,0 +1,9 @@
+# Local source/business documents kept out of the GitHub Pages deployment repo
+*.docx
+*.pptx
+*.jpg
+*.png
+~$*
+
+# Local upload/temp folders
+.uploads/

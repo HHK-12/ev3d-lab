@@ -667,6 +667,178 @@
       line-height:1.6;
     }
 
+    .principle-lab{
+      display:grid;
+      grid-template-columns:minmax(0,1.18fr) minmax(280px,.82fr);
+      gap:12px;
+      margin-bottom:12px;
+      align-items:stretch;
+    }
+
+    .principle-model{
+      position:relative;
+      min-height:390px;
+      overflow:hidden;
+      border:1px solid rgba(63,91,124,.13);
+      border-radius:8px;
+      background:
+        linear-gradient(145deg,rgba(255,255,255,.54),rgba(231,248,244,.26)),
+        radial-gradient(ellipse at 78% 16%,rgba(24,151,184,.16),transparent 48%);
+    }
+
+    .cell-stage{
+      position:absolute;
+      inset:0;
+    }
+
+    .principle-model canvas{
+      width:100%;
+      height:100%;
+      display:block;
+    }
+
+    .cell-overlay{
+      position:absolute;
+      left:12px;
+      right:12px;
+      top:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      pointer-events:none;
+    }
+
+    .cell-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      border:1px solid rgba(255,255,255,.75);
+      border-radius:999px;
+      background:rgba(255,255,255,.66);
+      padding:7px 10px;
+      color:#17304a;
+      font-size:12px;
+      font-weight:850;
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      box-shadow:0 10px 24px rgba(42,73,104,.1);
+    }
+
+    .cell-legend{
+      display:grid;
+      gap:6px;
+      border:1px solid rgba(255,255,255,.75);
+      border-radius:8px;
+      background:rgba(255,255,255,.66);
+      padding:9px;
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      box-shadow:0 10px 24px rgba(42,73,104,.1);
+    }
+
+    .legend-item{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      color:#52647a;
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .legend-dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:var(--dot);
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--dot) 18%,transparent);
+      flex:none;
+    }
+
+    .cell-controls{
+      position:absolute;
+      left:12px;
+      right:12px;
+      bottom:12px;
+      display:flex;
+      gap:7px;
+      flex-wrap:wrap;
+      padding:6px;
+      border:1px solid rgba(255,255,255,.75);
+      border-radius:8px;
+      background:rgba(255,255,255,.64);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      box-shadow:0 10px 24px rgba(42,73,104,.1);
+    }
+
+    .cell-btn{
+      min-height:34px;
+      border:0;
+      border-radius:6px;
+      padding:0 10px;
+      background:transparent;
+      color:#41556c;
+      font-size:13px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .cell-btn.active{
+      color:white;
+      background:#12314b;
+    }
+
+    .principle-side{
+      border:1px solid rgba(63,91,124,.13);
+      border-radius:8px;
+      background:rgba(255,255,255,.58);
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .principle-side h3{
+      margin:0;
+      font-size:18px;
+      color:#18324c;
+    }
+
+    .principle-side p{
+      margin:0;
+      color:#52647a;
+      line-height:1.68;
+      font-size:13px;
+    }
+
+    .principle-kv{
+      display:grid;
+      gap:8px;
+      margin-top:auto;
+    }
+
+    .principle-kv div{
+      display:grid;
+      grid-template-columns:76px 1fr;
+      gap:9px;
+      align-items:start;
+      padding:9px 0;
+      border-top:1px solid rgba(63,91,124,.1);
+    }
+
+    .principle-kv span{
+      color:#738296;
+      font-size:12px;
+      font-weight:750;
+    }
+
+    .principle-kv strong{
+      color:#17304a;
+      font-size:13px;
+      line-height:1.55;
+    }
+
     .roadmap{
       display:grid;
       grid-template-columns:repeat(4,1fr);
@@ -733,6 +905,8 @@
       .grid-3,.grid-4,.roadmap{grid-template-columns:1fr}
       .content-section{padding:18px}
       .content-head{display:block}
+      .principle-lab{grid-template-columns:1fr}
+      .principle-model{min-height:360px}
       .principle-grid{grid-template-columns:1fr}
       .canvas-overlay,.canvas-bottom{left:10px;right:10px}
       .canvas-bottom{align-items:flex-end}
@@ -749,6 +923,10 @@
       .metrics{grid-template-columns:1fr}
       .model-label{max-width:calc(100vw - 84px)}
       .model-label p{display:none}
+      .cell-overlay{display:block}
+      .cell-legend{display:none}
+      .cell-controls{overflow:auto;flex-wrap:nowrap}
+      .cell-btn{white-space:nowrap}
       .status-stack{display:none}
       .control-group{grid-template-columns:1fr}
       .mobile-note{display:block;color:var(--muted);font-size:12px;margin-top:8px}
@@ -898,6 +1076,35 @@
             <h2>把锂离子电池讲成学生能看见的“离子流 + 电子流”。</h2>
             <p>根据《汽车电池技术——新能源汽车电池分类及特性》的电池分类与特性内容，EV3D Lab 将动力电池原理拆成结构认知、充放电路径、材料对比和安全诊断四类实训。</p>
           </div>
+        </div>
+        <div class="principle-lab" aria-label="电芯原理三维交互演示">
+          <div class="principle-model">
+            <div id="cellStage" class="cell-stage"></div>
+            <div class="cell-overlay">
+              <span class="cell-tag"><i data-lucide="mouse-pointer-2"></i> 可旋转电芯剖面</span>
+              <div class="cell-legend" aria-label="三维元素图例">
+                <div class="legend-item"><i class="legend-dot" style="--dot:#19a77d"></i>锂离子 Li+</div>
+                <div class="legend-item"><i class="legend-dot" style="--dot:#f19a2a"></i>外部电子 e-</div>
+                <div class="legend-item"><i class="legend-dot" style="--dot:#ffffff"></i>隔膜</div>
+              </div>
+            </div>
+            <div class="cell-controls" aria-label="电芯原理交互模式">
+              <button class="cell-btn active" data-cell-mode="charge">充电</button>
+              <button class="cell-btn" data-cell-mode="discharge">放电</button>
+              <button class="cell-btn" data-cell-mode="lfp">LFP</button>
+              <button class="cell-btn" data-cell-mode="ncm">三元锂</button>
+              <button class="cell-btn" data-cell-mode="risk">热风险</button>
+            </div>
+          </div>
+          <aside class="principle-side">
+            <h3 id="cellInfoTitle">充电过程：锂离子从正极嵌入负极</h3>
+            <p id="cellInfoText">充电时，锂离子从正极材料脱出，经电解液穿过隔膜嵌入负极石墨；电子经外部电路到达负极，电能被转化为化学能储存。</p>
+            <div class="principle-kv">
+              <div><span>离子方向</span><strong id="ionDirection">正极 → 负极</strong></div>
+              <div><span>电子方向</span><strong id="electronDirection">外部电路 → 负极</strong></div>
+              <div><span>教学提问</span><strong id="classQuestion">为什么电子不能直接穿过电解液和隔膜？</strong></div>
+            </div>
+          </aside>
         </div>
         <div class="principle-grid">
           <article class="principle-card">
@@ -1344,6 +1551,266 @@
 
     renderer.domElement.setAttribute("data-render-ready", "true");
     document.body.dataset.threeReady = "true";
+
+    function setupCellPrincipleLab(){
+      const cellStage = document.getElementById("cellStage");
+      if(!cellStage) return;
+
+      const cellScene = new THREE.Scene();
+      const cellCamera = new THREE.PerspectiveCamera(42, cellStage.clientWidth / cellStage.clientHeight, 0.1, 80);
+      cellCamera.position.set(4.9, 3.2, 6.2);
+
+      const cellRenderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+      cellRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      cellRenderer.setSize(cellStage.clientWidth, cellStage.clientHeight);
+      cellRenderer.shadowMap.enabled = true;
+      cellRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      cellStage.appendChild(cellRenderer.domElement);
+
+      const cellControls = new OrbitControls(cellCamera, cellRenderer.domElement);
+      cellControls.enableDamping = true;
+      cellControls.dampingFactor = .07;
+      cellControls.target.set(0, .25, 0);
+      cellControls.minDistance = 3.8;
+      cellControls.maxDistance = 11;
+
+      cellScene.add(new THREE.HemisphereLight(0xffffff, 0xc6d8e5, 2.4));
+      const cellKey = new THREE.DirectionalLight(0xffffff, 2.3);
+      cellKey.position.set(4, 6, 4);
+      cellKey.castShadow = true;
+      cellScene.add(cellKey);
+      const cellRim = new THREE.DirectionalLight(0x8ff1d0, 1.2);
+      cellRim.position.set(-4, 3, -4);
+      cellScene.add(cellRim);
+
+      const cellMats = {
+        casing: new THREE.MeshPhysicalMaterial({ color:0xe9f3f6, roughness:.18, metalness:.04, transparent:true, opacity:.28, transmission:.18, clearcoat:.8 }),
+        cathodeLfp: new THREE.MeshStandardMaterial({ color:0x19a77d, roughness:.34, metalness:.12 }),
+        cathodeNcm: new THREE.MeshStandardMaterial({ color:0x9a6be8, roughness:.34, metalness:.16 }),
+        anode: new THREE.MeshStandardMaterial({ color:0x1d6fbe, roughness:.36, metalness:.18 }),
+        separator: new THREE.MeshPhysicalMaterial({ color:0xffffff, roughness:.2, transparent:true, opacity:.72 }),
+        electrolyte: new THREE.MeshPhysicalMaterial({ color:0x9bd8e8, roughness:.05, transparent:true, opacity:.18, transmission:.2 }),
+        ion: new THREE.MeshBasicMaterial({ color:0x19a77d }),
+        electron: new THREE.MeshBasicMaterial({ color:0xf19a2a }),
+        wire: new THREE.MeshStandardMaterial({ color:0xf19a2a, roughness:.3, metalness:.45, emissive:0x2b1200, emissiveIntensity:.16 }),
+        risk: new THREE.MeshBasicMaterial({ color:0xff4d4d, transparent:true, opacity:.75 }),
+        label: new THREE.MeshStandardMaterial({ color:0x23364a, roughness:.45 })
+      };
+
+      const cellRoot = new THREE.Group();
+      cellScene.add(cellRoot);
+
+      const casing = new THREE.Mesh(roundedBox(4.4, 1.7, 2.6, .12), cellMats.casing);
+      casing.position.y = .55;
+      casing.castShadow = true;
+      casing.receiveShadow = true;
+      cellRoot.add(casing);
+
+      const cathode = new THREE.Mesh(roundedBox(.72, 1.28, 2.05, .07), cellMats.cathodeLfp);
+      cathode.name = "正极";
+      cathode.position.set(-1.22, .55, 0);
+      cathode.castShadow = true;
+      cellRoot.add(cathode);
+
+      const separator = new THREE.Mesh(new THREE.BoxGeometry(.12, 1.42, 2.22), cellMats.separator);
+      separator.name = "隔膜";
+      separator.position.set(0, .55, 0);
+      separator.castShadow = true;
+      cellRoot.add(separator);
+
+      const anode = new THREE.Mesh(roundedBox(.72, 1.28, 2.05, .07), cellMats.anode);
+      anode.name = "负极";
+      anode.position.set(1.22, .55, 0);
+      anode.castShadow = true;
+      cellRoot.add(anode);
+
+      const electrolyte = new THREE.Mesh(new THREE.BoxGeometry(3.3, 1.18, 1.9), cellMats.electrolyte);
+      electrolyte.position.set(0, .55, 0);
+      cellRoot.add(electrolyte);
+
+      const tabs = new THREE.Group();
+      const tabGeo = new THREE.BoxGeometry(.24, .48, .28);
+      const tab1 = new THREE.Mesh(tabGeo, cellMats.wire);
+      tab1.position.set(-1.22, 1.62, -.88);
+      const tab2 = new THREE.Mesh(tabGeo, cellMats.wire);
+      tab2.position.set(1.22, 1.62, .88);
+      tabs.add(tab1, tab2);
+      cellRoot.add(tabs);
+
+      const ionCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-1.22,.72,-.78),
+        new THREE.Vector3(-.55,.84,-.38),
+        new THREE.Vector3(0,.72,0),
+        new THREE.Vector3(.55,.62,.38),
+        new THREE.Vector3(1.22,.74,.78)
+      ]);
+
+      const electronCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(1.22,1.62,.88),
+        new THREE.Vector3(1.65,2.25,1.32),
+        new THREE.Vector3(0,2.72,1.48),
+        new THREE.Vector3(-1.65,2.25,-1.32),
+        new THREE.Vector3(-1.22,1.62,-.88)
+      ]);
+
+      const wire = new THREE.Mesh(new THREE.TubeGeometry(electronCurve, 90, .035, 10, false), cellMats.wire);
+      wire.castShadow = true;
+      cellRoot.add(wire);
+
+      const ionDots = [];
+      for(let i=0;i<12;i++){
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(.075,18,18), cellMats.ion);
+        dot.userData.offset = i / 12;
+        cellRoot.add(dot);
+        ionDots.push(dot);
+      }
+
+      const electronDots = [];
+      for(let i=0;i<10;i++){
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(.06,16,16), cellMats.electron);
+        dot.userData.offset = i / 10;
+        cellRoot.add(dot);
+        electronDots.push(dot);
+      }
+
+      const riskGroup = new THREE.Group();
+      const riskRing = new THREE.Mesh(new THREE.TorusGeometry(.52,.025,12,76), cellMats.risk);
+      riskRing.position.set(.08,.55,0);
+      riskRing.rotation.y = Math.PI/2;
+      const riskHotspot = new THREE.Mesh(new THREE.SphereGeometry(.14,22,22), cellMats.risk);
+      riskHotspot.position.set(.08,.55,0);
+      riskGroup.add(riskRing, riskHotspot);
+      riskGroup.visible = false;
+      cellRoot.add(riskGroup);
+
+      const baseGrid = new THREE.GridHelper(7, 10, 0x85a7b7, 0xc5d7df);
+      baseGrid.position.y = -.04;
+      baseGrid.material.transparent = true;
+      baseGrid.material.opacity = .18;
+      cellScene.add(baseGrid);
+
+      const cellInfo = {
+        title: document.getElementById("cellInfoTitle"),
+        text: document.getElementById("cellInfoText"),
+        ion: document.getElementById("ionDirection"),
+        electron: document.getElementById("electronDirection"),
+        question: document.getElementById("classQuestion")
+      };
+
+      const cellModes = {
+        charge: {
+          title:"充电过程：锂离子从正极嵌入负极",
+          text:"充电时，锂离子从正极材料脱出，经电解液穿过隔膜嵌入负极石墨；电子经外部电路到达负极，电能被转化为化学能储存。",
+          ion:"正极 → 负极",
+          electron:"外部电路 → 负极",
+          question:"为什么电子不能直接穿过电解液和隔膜？",
+          cathode:"lfp",
+          direction:1,
+          risk:false
+        },
+        discharge: {
+          title:"放电过程：电子经负载输出电能",
+          text:"放电时，锂离子从负极脱出回到正极；电子从负极经外部负载流向正极，为电机控制器和车载系统提供电能。",
+          ion:"负极 → 正极",
+          electron:"负极 → 外部负载 → 正极",
+          question:"为什么离子在电池内部流动，而电子必须走外部电路？",
+          cathode:"lfp",
+          direction:-1,
+          risk:false
+        },
+        lfp: {
+          title:"磷酸铁锂 LFP：安全、长寿命、低成本",
+          text:"LFP 使用磷酸铁锂作为正极材料，热稳定性和循环寿命更突出，适合讲解安全边界、低成本和BMS均衡策略。",
+          ion:"嵌入/脱嵌机理不变",
+          electron:"外部电路完成能量交换",
+          question:"为什么LFP适合做安全性和循环寿命教学案例？",
+          cathode:"lfp",
+          direction:.65,
+          risk:false
+        },
+        ncm: {
+          title:"三元锂 NCM/NCA：高能量密度与热管理",
+          text:"三元锂正极包含镍、钴、锰或铝等元素，能量密度更高，适合讲解续航优势、低温表现与热管理要求。",
+          ion:"嵌入/脱嵌机理不变",
+          electron:"外部电路完成能量交换",
+          question:"能量密度提升为什么会带来更高的热管理要求？",
+          cathode:"ncm",
+          direction:.8,
+          risk:false
+        },
+        risk: {
+          title:"热风险诊断：过充、短路与隔膜损伤",
+          text:"当过充、高温、短路或隔膜损伤出现时，电芯可能发生热失控。实训中可让学生定位隔膜、电解液和BMS采样异常。",
+          ion:"异常堆积 / 内短路风险",
+          electron:"短路路径失控",
+          question:"BMS应如何通过电压、温度和绝缘数据提前预警？",
+          cathode:"ncm",
+          direction:1.15,
+          risk:true
+        }
+      };
+
+      let activeCellMode = "charge";
+      let cellDirection = 1;
+
+      function setCellMode(mode){
+        activeCellMode = mode;
+        const cfg = cellModes[mode];
+        cellDirection = cfg.direction;
+        cathode.material = cfg.cathode === "ncm" ? cellMats.cathodeNcm : cellMats.cathodeLfp;
+        riskGroup.visible = cfg.risk;
+        cellInfo.title.textContent = cfg.title;
+        cellInfo.text.textContent = cfg.text;
+        cellInfo.ion.textContent = cfg.ion;
+        cellInfo.electron.textContent = cfg.electron;
+        cellInfo.question.textContent = cfg.question;
+        document.querySelectorAll(".cell-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.cellMode === mode));
+      }
+
+      document.querySelectorAll(".cell-btn").forEach(btn => btn.addEventListener("click", () => setCellMode(btn.dataset.cellMode)));
+      setCellMode("charge");
+
+      function resizeCell(){
+        const w = cellStage.clientWidth || 1;
+        const h = cellStage.clientHeight || 1;
+        cellCamera.aspect = w / h;
+        cellCamera.updateProjectionMatrix();
+        cellRenderer.setSize(w, h);
+      }
+      window.addEventListener("resize", resizeCell);
+
+      cellRenderer.domElement.setAttribute("data-principle-render-ready", "true");
+      document.body.dataset.principleReady = "true";
+
+      function cellTick(time){
+        requestAnimationFrame(cellTick);
+        const speed = activeCellMode === "risk" ? .00042 : .00025;
+        ionDots.forEach((dot, idx) => {
+          let t = (time * speed + dot.userData.offset) % 1;
+          if(cellDirection < 0) t = 1 - t;
+          dot.position.copy(ionCurve.getPoint(t));
+          dot.scale.setScalar(1 + Math.sin(time * .006 + idx) * .14);
+        });
+        electronDots.forEach((dot, idx) => {
+          let t = (time * speed * 1.25 + dot.userData.offset) % 1;
+          if(cellDirection > 0) t = 1 - t;
+          dot.position.copy(electronCurve.getPoint(t));
+        });
+        if(riskGroup.visible){
+          riskRing.rotation.z += .022;
+          riskHotspot.scale.setScalar(1.05 + Math.sin(time * .008) * .28);
+          separator.material.opacity = .45 + Math.sin(time * .006) * .14;
+        }else{
+          separator.material.opacity = .72;
+        }
+        cellRoot.rotation.y += .00045;
+        cellControls.update();
+        cellRenderer.render(cellScene, cellCamera);
+      }
+      cellTick(0);
+    }
+
+    setupCellPrincipleLab();
 
     function tick(time){
       requestAnimationFrame(tick);

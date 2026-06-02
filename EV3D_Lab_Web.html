@@ -931,9 +931,47 @@
       .control-group{grid-template-columns:1fr}
       .mobile-note{display:block;color:var(--muted);font-size:12px;margin-top:8px}
     }
+
+    .zsv-switcher{
+      position:fixed;
+      left:12px;
+      bottom:12px;
+      z-index:9999;
+      display:flex;
+      gap:6px;
+      align-items:center;
+      max-width:calc(100vw - 24px);
+      overflow:auto;
+      padding:6px;
+      border:1px solid rgba(63,91,124,.16);
+      border-radius:8px;
+      background:rgba(255,255,255,.76);
+      backdrop-filter:blur(14px) saturate(145%);
+      -webkit-backdrop-filter:blur(14px) saturate(145%);
+      box-shadow:0 12px 28px rgba(42,73,104,.12);
+    }
+    .zsv-switcher a{
+      display:inline-flex;
+      align-items:center;
+      min-height:30px;
+      padding:0 9px;
+      border-radius:6px;
+      color:#20374e;
+      font-size:12px;
+      font-weight:850;
+      white-space:nowrap;
+      text-decoration:none;
+    }
+    .zsv-switcher a:first-child{background:#12314b;color:#fff}
   </style>
 </head>
 <body>
+  <div class="zsv-switcher" aria-label="智数维科技官网页面切换">
+    <a href="index.html">智数维官网</a>
+    <a href="platform/auto3d-engine.html">Auto3D</a>
+    <a href="solutions/ev3d-lab.html">EV3D</a>
+    <a href="strategy/framework.html">框架</a>
+  </div>
   <div class="app-shell">
     <header class="topbar">
       <a class="brand" href="#top" aria-label="EV3D Lab 首页">

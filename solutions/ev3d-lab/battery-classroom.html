@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>电池原理课堂 | 智数维科技</title>
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <style>
+    .classroom-hero{grid-template-columns:minmax(0,.9fr) minmax(420px,1.1fr)}
+    .lesson-frame{padding:12px;background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(239,250,247,.56));min-height:620px}
+    .frame-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}
+    .frame-head h3{margin:0;font-size:18px}
+    .demo-frame{width:100%;height:560px;border:1px solid var(--line);border-radius:8px;background:white}
+    .lesson-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .step-list{display:grid;gap:10px}
+    .step{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start;border:1px solid var(--line);border-radius:8px;background:#fff;padding:14px}
+    .step b{width:42px;height:42px;border-radius:8px;display:grid;place-items:center;background:#eaf7f3;color:#0f7771}
+    .step h3{margin:0 0 6px;font-size:16px}
+    .step p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+    @media (max-width:1000px){.classroom-hero,.lesson-grid{grid-template-columns:1fr}.demo-frame{height:520px}}
+    @media (max-width:560px){.demo-frame{height:480px}.step{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-nav">
+      <a class="brand" href="../../index.html"><div class="brand-mark">智</div><div><h1>智数维科技</h1><span>三级页面 · 电池原理课堂</span></div></a>
+      <nav class="nav-links">
+        <a href="../../index.html">首页</a>
+        <a href="../../platform/auto3d-engine.html">Auto3D Engine</a>
+        <a href="../ev3d-lab.html">EV3D Lab</a>
+        <a href="../../strategy/framework.html">框架落地</a>
+        <a class="active" href="battery-classroom.html">电池课堂</a>
+      </nav>
+      <a class="nav-action" href="../../EV3D_Lab_Web.html#battery-principle">完整演示</a>
+    </header>
+
+    <main>
+      <section class="hero classroom-hero">
+        <div class="hero-card">
+          <span class="eyebrow">具体落地场景 · 第一节样板课</span>
+          <h2 class="hero-title">新能源汽车动力电池原理课堂。</h2>
+          <p class="lead">这页是 EV3D Lab 的三级落地页，专门讲一节课如何交付：结构认知、充放电路径、LFP/三元锂对比、热风险诊断和BMS预警。</p>
+          <div class="actions">
+            <a class="btn primary" href="../../EV3D_Lab_Web.html#battery-principle">打开完整三维课堂</a>
+            <a class="btn secondary" href="../ev3d-lab.html">返回 EV3D Lab</a>
+          </div>
+        </div>
+        <aside class="panel lesson-frame">
+          <div class="frame-head"><h3>课堂三维演示嵌入</h3><span class="badge">Interactive</span></div>
+          <iframe class="demo-frame" src="../../EV3D_Lab_Web.html#battery-principle" title="EV3D Lab 电池原理课堂三维演示"></iframe>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><div><h2>一节课的完整教学流程</h2><p>不是只展示模型，而是把模型、任务、讲解、考核和复盘串起来。</p></div></div>
+        <div class="lesson-grid">
+          <div class="step-list">
+            <div class="step"><b>01</b><div><h3>结构认知</h3><p>学生在三维电芯剖面里标注正极、负极、隔膜、电解液、BMS采样线束和高压连接器。</p></div></div>
+            <div class="step"><b>02</b><div><h3>充放电原理</h3><p>切换充电/放电，观察 Li+ 迁移方向和外部电子路径，解释化学能与电能转换。</p></div></div>
+            <div class="step"><b>03</b><div><h3>材料对比</h3><p>切换 LFP 与三元锂，比较安全、寿命、成本、能量密度和低温表现。</p></div></div>
+            <div class="step"><b>04</b><div><h3>故障诊断</h3><p>进入热风险模式，定位过充、短路、高温、隔膜损伤，并说明BMS预警数据。</p></div></div>
+          </div>
+          <table class="table">
+            <thead><tr><th>考核项</th><th>评分重点</th><th>输出</th></tr></thead>
+            <tbody>
+              <tr><td>结构标注</td><td>是否正确识别电芯核心结构</td><td>结构认知得分</td></tr>
+              <tr><td>路径解释</td><td>是否区分离子路径与电子路径</td><td>原理讲解得分</td></tr>
+              <tr><td>材料判断</td><td>是否能说明LFP和三元锂差异</td><td>材料对比报告</td></tr>
+              <tr><td>安全诊断</td><td>是否能识别热失控风险和BMS预警点</td><td>故障诊断报告</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><div><h2>为什么这节课适合做第一个样板场景</h2><p>它足够具体，也足够完整，能向学校展示 EV3D Lab 的真实教学价值。</p></div></div>
+        <div class="grid-4">
+          <div class="card"><span class="badge">可视化</span><h3>看得见</h3><p>电芯内部结构和离子/电子路径不再只靠PPT描述。</p></div>
+          <div class="card"><span class="badge">安全</span><h3>练得起</h3><p>高压、短路、热风险可以先在虚拟场景中训练。</p></div>
+          <div class="card"><span class="badge">考核</span><h3>评得准</h3><p>学生操作、解释和诊断流程都可以转成任务评分。</p></div>
+          <div class="card"><span class="badge">销售</span><h3>讲得清</h3><p>老师、教务和采购方都容易理解产品价值。</p></div>
+        </div>
+      </section>
+
+      <footer class="page-footer"><div><h2>电池课堂是智数维科技官网的三级落地页面。</h2><p>从这里可以返回 EV3D Lab 产品页，也可以进入 Auto3D Engine 平台页。</p></div><a href="../../platform/auto3d-engine.html">查看平台页</a></footer>
+    </main>
+  </div>
+</body>
+</html>

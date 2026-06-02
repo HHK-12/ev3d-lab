@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto3D Engine | 智数维科技</title>
+  <link rel="stylesheet" href="../assets/site.css" />
+  <style>
+    .platform-hero{grid-template-columns:minmax(0,1fr) 420px}
+    .engine-board{padding:20px;display:grid;gap:12px;background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(238,246,255,.54))}
+    .engine-core{
+      border-radius:8px;
+      color:white;
+      background:linear-gradient(135deg,#12314b,#2867c9 58%,#755bd7);
+      padding:18px;
+      min-height:168px;
+      display:grid;
+      align-content:end;
+    }
+    .engine-core h3{margin:0;font-size:28px}
+    .engine-core p{margin:8px 0 0;color:rgba(255,255,255,.74);line-height:1.6}
+    .capability-ring{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .capability{border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.76);padding:13px}
+    .capability strong{display:block;color:#17304a}
+    .capability span{display:block;margin-top:5px;color:var(--muted);font-size:12px;line-height:1.5}
+    .matrix{display:grid;grid-template-columns:1.2fr 1fr;gap:12px}
+    .growth-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    .growth-grid .card{min-height:176px}
+    @media (max-width:1000px){.platform-hero,.matrix{grid-template-columns:1fr}.growth-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-nav">
+      <a class="brand" href="../index.html"><div class="brand-mark">智</div><div><h1>智数维科技</h1><span>Auto3D Engine 平台</span></div></a>
+      <nav class="nav-links">
+        <a href="../index.html">首页</a>
+        <a class="active" href="auto3d-engine.html">Auto3D Engine</a>
+        <a href="../solutions/ev3d-lab.html">EV3D Lab</a>
+        <a href="../strategy/framework.html">框架落地</a>
+        <a href="../solutions/ev3d-lab/battery-classroom.html">电池课堂</a>
+      </nav>
+      <a class="nav-action" href="../Auto3D_Engine.html">原路演页</a>
+    </header>
+
+    <main>
+      <section class="hero platform-hero">
+        <div class="hero-card">
+          <span class="eyebrow">平台层 · AI + 数字孪生</span>
+          <h2 class="hero-title">Auto3D Engine 是智数维科技的产业平台底座。</h2>
+          <p class="lead">它承载三维交互、汽车知识图谱、AI诊断、数字模型库和课程考核能力。EV3D Lab 是该平台面向职业教育市场的第一个垂直产品。</p>
+          <div class="actions">
+            <a class="btn primary" href="../solutions/ev3d-lab.html">看首发产品</a>
+            <a class="btn secondary" href="../strategy/framework.html">看创业落地框架</a>
+          </div>
+        </div>
+        <aside class="panel engine-board">
+          <div class="engine-core"><h3>Auto3D Engine</h3><p>3D模型库 + AI导师 + 故障诊断 + 教学数据闭环。</p></div>
+          <div class="capability-ring">
+            <div class="capability"><strong>Web3D 引擎</strong><span>浏览器端三维拆装、剖切、爆炸图与动态原理。</span></div>
+            <div class="capability"><strong>AI 诊断</strong><span>故障码、部件定位、标准检测流程和维修建议。</span></div>
+            <div class="capability"><strong>知识图谱</strong><span>发动机、电池、电机、电控和维修工艺知识结构化。</span></div>
+            <div class="capability"><strong>数据闭环</strong><span>学生操作轨迹、自动评分、班级学情与个性化复训。</span></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><div><h2>产品矩阵</h2><p>平台底座可以支持多个商业化产品线，当前优先做职业教育。</p></div></div>
+        <div class="matrix">
+          <table class="table">
+            <thead><tr><th>产品线</th><th>客户</th><th>核心价值</th><th>价格形态</th></tr></thead>
+            <tbody>
+              <tr><td>Auto3D 教学平台</td><td>职业院校</td><td>三维教学、虚拟实训、考核闭环</td><td>1-10万/年</td></tr>
+              <tr><td>Auto3D Enterprise</td><td>主机厂、4S集团</td><td>新车型培训、私有部署、LMS对接</td><td>10-100万+</td></tr>
+              <tr><td>EV3D Lab</td><td>新能源专业院校</td><td>三电系统虚拟仿真实训</td><td>8-80万/校</td></tr>
+              <tr><td>Auto3D AI 导师</td><td>院校/企业/个人</td><td>汽车版智能导师与模型联动讲解</td><td>增值模块</td></tr>
+              <tr><td>Auto3D Assets</td><td>车企/供应商</td><td>高精度3D模型、数字展厅、海外营销</td><td>5-200万/项目</td></tr>
+            </tbody>
+          </table>
+          <div class="card"><span class="badge">当前优先级</span><h3>先做 EV3D Lab</h3><p>平台想象空间很大，但创业早期先抓最清晰的采购场景：新能源汽车职业教育三维实训。它能带来样板校、课程数据、模型积累和现金流。</p><ul><li>客户明确：中职、高职、技师学院</li><li>预算明确：实训室与专业建设</li><li>内容明确：动力电池、电机电控、高压安全</li></ul></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><div><h2>五个增长引擎</h2><p>平台的长期价值来自多产品线复用同一套模型库、知识图谱和AI诊断能力。</p></div></div>
+        <div class="growth-grid">
+          <div class="card"><span class="badge">教育</span><h3>新能源数字教学</h3><p>电池包、BMS、电机、电控，是未来5-10年的主要增量教学内容。</p></div>
+          <div class="card"><span class="badge">实训室</span><h3>数字孪生实验室</h3><p>单校20-100万，替代部分实体设备，形成高客单价方案。</p></div>
+          <div class="card"><span class="badge">AI</span><h3>汽车智能导师</h3><p>自然语言提问后联动三维模型讲解结构、故障和检测流程。</p></div>
+          <div class="card"><span class="badge">认证</span><h3>维修认证平台</h3><p>培训、考试、认证、就业闭环，面向新能源维修人才缺口。</p></div>
+          <div class="card"><span class="badge">资产</span><h3>车企数字展厅</h3><p>整车和核心技术系统的交互展示，服务车展、官网与海外推广。</p></div>
+        </div>
+      </section>
+
+      <footer class="page-footer"><div><h2>从平台到底层数据，从数据到首个产品。</h2><p>继续查看 EV3D Lab，了解智数维科技如何把平台能力落到职业教育实训。</p></div><a href="../solutions/ev3d-lab.html">进入 EV3D Lab</a></footer>
+    </main>
+  </div>
+</body>
+</html>

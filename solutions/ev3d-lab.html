@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EV3D Lab | 智数维科技</title>
+  <link rel="stylesheet" href="../assets/site.css" />
+  <style>
+    .lab-hero{grid-template-columns:minmax(0,.95fr) minmax(420px,1.05fr)}
+    .lab-console{padding:16px;display:grid;grid-template-rows:auto 1fr;gap:12px;background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(234,247,243,.56))}
+    .console-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .console-head h3{margin:0;font-size:20px}
+    .console-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .console-card{border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.74);padding:13px;min-height:128px}
+    .console-card strong{display:block;color:#17304a;font-size:16px}
+    .console-card span{display:block;margin-top:6px;color:var(--muted);font-size:12px;line-height:1.55}
+    .course-layout{display:grid;grid-template-columns:300px 1fr;gap:12px}
+    .course-list{display:grid;gap:8px}
+    .course-list .card{min-height:108px}
+    .pricing{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .price{border:1px solid var(--line);border-radius:8px;background:#fff;padding:16px}
+    .price strong{font-size:26px;color:#12314b}
+    @media (max-width:1000px){.lab-hero,.course-layout{grid-template-columns:1fr}.pricing{grid-template-columns:1fr}.console-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-nav">
+      <a class="brand" href="../index.html"><div class="brand-mark">智</div><div><h1>智数维科技</h1><span>EV3D Lab 产品体系</span></div></a>
+      <nav class="nav-links">
+        <a href="../index.html">首页</a>
+        <a href="../platform/auto3d-engine.html">Auto3D Engine</a>
+        <a class="active" href="ev3d-lab.html">EV3D Lab</a>
+        <a href="../strategy/framework.html">框架落地</a>
+        <a href="ev3d-lab/battery-classroom.html">电池课堂</a>
+      </nav>
+      <a class="nav-action" href="../EV3D_Lab_Web.html">三维演示页</a>
+    </header>
+
+    <main>
+      <section class="hero lab-hero">
+        <div class="hero-card">
+          <span class="eyebrow">首发产品 · 职业教育三维实训</span>
+          <h2 class="hero-title">EV3D Lab，把新能源汽车“三电系统”做成可交付的数字实训课程。</h2>
+          <p class="lead">面向中职、高职、技师学院，提供动力电池、电机电控、高压安全、故障诊断和教师考核的一站式三维实训系统。</p>
+          <div class="actions">
+            <a class="btn primary" href="ev3d-lab/battery-classroom.html">进入电池课堂</a>
+            <a class="btn secondary" href="../EV3D_Lab_Web.html">打开原三维演示</a>
+          </div>
+        </div>
+        <aside class="panel lab-console">
+          <div class="console-head"><h3>实训工作台</h3><span class="badge">V1.0</span></div>
+          <div class="console-grid">
+            <div class="console-card"><strong>动力电池包</strong><span>正极、负极、隔膜、电解液、电芯模组、热管理。</span></div>
+            <div class="console-card"><strong>BMS与采样</strong><span>单体电压、温度、均衡、通讯异常和预警策略。</span></div>
+            <div class="console-card"><strong>电机电控</strong><span>驱动电机、逆变器、控制器、能量流和信号流。</span></div>
+            <div class="console-card"><strong>高压安全</strong><span>断电流程、绝缘检测、高压互锁和风险步骤考核。</span></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><div><h2>产品如何落到一节课</h2><p>先做“动力电池原理课堂”，因为它同时包含结构、原理、材料、安全和诊断。</p></div></div>
+        <div class="course-layout">
+          <div class="course-list">
+            <div class="card"><span class="badge">Step 1</span><h3>结构认知</h3><p>电芯、模组、隔膜、电解液、BMS采样线束。</p></div>
+            <div class="card"><span class="badge">Step 2</span><h3>充放电原理</h3><p>Li+ 在正负极之间迁移，电子经外部电路流动。</p></div>
+            <div class="card"><span class="badge">Step 3</span><h3>材料对比</h3><p>LFP 和三元锂在能量密度、安全、寿命、成本上的差异。</p></div>
+            <div class="card"><span class="badge">Step 4</span><h3>故障诊断</h3><p>过充、短路、高温、隔膜损伤和热失控预警。</p></div>
+          </div>
+          <table class="table">
+            <thead><tr><th>角色</th><th>使用方式</th><th>产出结果</th></tr></thead>
+            <tbody>
+              <tr><td>老师</td><td>用三维模型讲结构，用任务书组织实训，用教师端考核</td><td>更低备课成本，标准化课堂流程</td></tr>
+              <tr><td>学生</td><td>旋转、拆解、切换充放电、定位故障、提交实训报告</td><td>看得懂原理，练得会流程</td></tr>
+              <tr><td>学校</td><td>建设新能源汽车数字实训能力，形成专业建设成果</td><td>示范课程、实训室项目、技能竞赛支撑</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><div><h2>版本定价</h2><p>从课程包试点到完整虚拟仿真实训室，逐步提高客单价。</p></div></div>
+        <div class="pricing">
+          <div class="price"><span class="badge">基础版</span><h3>三维认知</h3><strong>8-15万</strong><p>模型展示、基础动画、课件资源。</p></div>
+          <div class="price"><span class="badge">标准版</span><h3>实训考核</h3><strong>20-40万</strong><p>拆装训练、故障诊断、教师端、学生端。</p></div>
+          <div class="price"><span class="badge">旗舰版</span><h3>数字实训室</h3><strong>50-80万</strong><p>软件、硬件、课程、教师培训和实施。</p></div>
+          <div class="price"><span class="badge">年度服务</span><h3>持续更新</h3><strong>10%-20%</strong><p>模型更新、课程更新、系统维护和培训。</p></div>
+        </div>
+      </section>
+
+      <footer class="page-footer"><div><h2>下一页：电池原理课堂</h2><p>进入三级页面，查看更具体的课程结构和三维电芯交互。</p></div><a href="ev3d-lab/battery-classroom.html">进入三级页面</a></footer>
+    </main>
+  </div>
+</body>
+</html>

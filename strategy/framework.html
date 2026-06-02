@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>框架落地 | 智数维科技</title>
+  <link rel="stylesheet" href="../assets/site.css" />
+  <style>
+    .framework-hero{grid-template-columns:minmax(0,1fr) 380px}
+    .funnel{padding:18px;display:grid;gap:8px;background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(255,247,236,.55))}
+    .funnel-step{border:1px solid var(--line);border-radius:8px;background:#fff;padding:13px}
+    .funnel-step strong{display:block;color:#17304a}
+    .funnel-step span{display:block;color:var(--muted);font-size:12px;margin-top:5px;line-height:1.5}
+    .framework-cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+    .framework-card{border:1px solid var(--line);border-radius:8px;background:#fff;padding:14px;text-align:left;cursor:pointer;min-height:168px}
+    .framework-card.active{border-color:#139873;box-shadow:0 14px 28px rgba(31,61,87,.1)}
+    .framework-card strong{display:grid;place-items:center;width:31px;height:31px;border-radius:8px;background:#eaf7f3;color:#0f7771;margin-bottom:10px}
+    .framework-card h3{margin:0;font-size:16px}
+    .framework-card p{margin:8px 0 0;color:var(--muted);font-size:12px;line-height:1.55}
+    .detail-layout{display:grid;grid-template-columns:260px 1fr;gap:12px}
+    .detail-tabs{display:grid;gap:8px;align-content:start}
+    .detail-tabs button{border:1px solid transparent;border-radius:8px;background:transparent;text-align:left;padding:12px;cursor:pointer;color:#40566a;font-weight:800}
+    .detail-tabs button.active{background:#fff;border-color:var(--line);box-shadow:0 10px 22px rgba(31,61,87,.08);color:#12314b}
+    .detail-panel{display:none}.detail-panel.active{display:block}
+    @media (max-width:1100px){.framework-hero,.detail-layout{grid-template-columns:1fr}.framework-cards{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:560px){.framework-cards{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-nav">
+      <a class="brand" href="../index.html"><div class="brand-mark">智</div><div><h1>智数维科技</h1><span>从平台到落地</span></div></a>
+      <nav class="nav-links">
+        <a href="../index.html">首页</a>
+        <a href="../platform/auto3d-engine.html">Auto3D Engine</a>
+        <a href="../solutions/ev3d-lab.html">EV3D Lab</a>
+        <a class="active" href="framework.html">框架落地</a>
+        <a href="../solutions/ev3d-lab/battery-classroom.html">电池课堂</a>
+      </nav>
+      <a class="nav-action" href="../EV3D_Lab_Mindmap.html">原框架页</a>
+    </header>
+
+    <main>
+      <section class="hero framework-hero">
+        <div class="hero-card">
+          <span class="eyebrow">方案 A · 框架首页 + 落地详情</span>
+          <h2 class="hero-title">讲大故事，也讲第一步怎么干。</h2>
+          <p class="lead">智数维科技的大框架是 Auto3D Engine，商业化第一步是 EV3D Lab，具体第一课是新能源汽车动力电池原理课堂。</p>
+          <div class="actions"><a class="btn primary" href="../solutions/ev3d-lab.html">看产品</a><a class="btn secondary" href="../solutions/ev3d-lab/battery-classroom.html">看具体课堂</a></div>
+        </div>
+        <aside class="panel funnel">
+          <div class="funnel-step"><strong>AI + 数字孪生汽车产业平台</strong><span>Auto3D Engine</span></div>
+          <div class="funnel-step"><strong>新能源汽车职业教育</strong><span>EV3D Lab</span></div>
+          <div class="funnel-step"><strong>三电系统虚拟实训</strong><span>动力电池、电机电控、高压安全</span></div>
+          <div class="funnel-step"><strong>动力电池原理课堂</strong><span>充放电、材料对比、热风险诊断</span></div>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><div><h2>六个框架模块</h2><p>点击模块查看具体落地说明。</p></div></div>
+        <div class="framework-cards">
+          <button class="framework-card active" data-tab data-target="vision"><strong>01</strong><h3>平台愿景</h3><p>为什么从 Auto3D Engine 出发。</p></button>
+          <button class="framework-card" data-tab data-target="customer"><strong>02</strong><h3>目标客户</h3><p>谁会买单，为什么买。</p></button>
+          <button class="framework-card" data-tab data-target="product"><strong>03</strong><h3>产品体系</h3><p>卖的是一套实训闭环。</p></button>
+          <button class="framework-card" data-tab data-target="scene"><strong>04</strong><h3>首个课堂</h3><p>电池原理课堂最适合演示。</p></button>
+          <button class="framework-card" data-tab data-target="business"><strong>05</strong><h3>商业模式</h3><p>从课程包到实训室大单。</p></button>
+          <button class="framework-card" data-tab data-target="execution"><strong>06</strong><h3>执行路径</h3><p>24个月完成商业验证。</p></button>
+        </div>
+      </section>
+
+      <section class="section detail-layout">
+        <aside class="detail-tabs">
+          <button class="active" data-tab data-target="vision">01 平台愿景</button>
+          <button data-tab data-target="customer">02 目标客户</button>
+          <button data-tab data-target="product">03 产品体系</button>
+          <button data-tab data-target="scene">04 首个课堂</button>
+          <button data-tab data-target="business">05 商业模式</button>
+          <button data-tab data-target="execution">06 执行路径</button>
+        </aside>
+        <div>
+          <article class="detail-panel active" data-panel="vision"><h2>Auto3D Engine 是平台底座</h2><p class="lead">最终覆盖教育、培训、数字资产、认证、营销和海外服务；早期先做 EV3D Lab，验证最清晰的采购场景。</p><div class="grid-2"><div class="card"><h3>平台能力</h3><ul><li>Web3D三维交互</li><li>AI诊断与知识图谱</li><li>汽车数字模型库</li><li>教学数据闭环</li></ul></div><div class="card"><h3>首个切口</h3><ul><li>职业院校预算明确</li><li>三电系统难教难练</li><li>高压安全适合虚拟仿真</li><li>样板校可区域复制</li></ul></div></div></article>
+          <article class="detail-panel" data-panel="customer"><h2>第一批客户：新能源专业院校</h2><p class="lead">中职、高职、技师学院是最清楚的买单对象，采购理由来自专业建设、实训室、技能竞赛和教学数字化。</p><table class="table"><thead><tr><th>客户</th><th>痛点</th><th>切入方式</th></tr></thead><tbody><tr><td>中职</td><td>老师备课难，设备不够用</td><td>基础版课程包</td></tr><tr><td>高职</td><td>专业群和示范成果压力</td><td>标准版实训考核</td></tr><tr><td>技师学院</td><td>技能训练与安全流程</td><td>旗舰实训室</td></tr></tbody></table></article>
+          <article class="detail-panel" data-panel="product"><h2>产品体系：学、练、考、诊断、复盘</h2><div class="grid-3"><div class="card"><h3>三维模型</h3><p>电池、电机、电控、高压配电。</p></div><div class="card"><h3>实训任务</h3><p>拆装、充放电、故障定位。</p></div><div class="card"><h3>教师考核</h3><p>任务布置、自动评分、学情分析。</p></div></div></article>
+          <article class="detail-panel" data-panel="scene"><h2>第一节样板课：动力电池原理</h2><table class="table"><thead><tr><th>环节</th><th>交互</th><th>掌握点</th></tr></thead><tbody><tr><td>结构认知</td><td>电芯剖面、隔膜、电解液</td><td>识别核心结构</td></tr><tr><td>充放电</td><td>Li+ 与电子路径</td><td>解释能量转换</td></tr><tr><td>材料对比</td><td>LFP/三元锂切换</td><td>理解安全与能量密度差异</td></tr><tr><td>热风险</td><td>隔膜损伤、短路标记</td><td>BMS预警逻辑</td></tr></tbody></table></article>
+          <article class="detail-panel" data-panel="business"><h2>商业模式：从试点到实训室</h2><div class="grid-4"><div class="metric"><strong>8-15万</strong><span>基础版</span></div><div class="metric"><strong>20-40万</strong><span>标准版</span></div><div class="metric"><strong>50-80万</strong><span>旗舰实训室</span></div><div class="metric"><strong>10%-20%</strong><span>年度服务</span></div></div></article>
+          <article class="detail-panel" data-panel="execution"><h2>24个月执行路径</h2><div class="grid-4"><div class="card"><span class="badge">0-2月</span><h3>需求验证</h3><p>访谈老师，锁定课程。</p></div><div class="card"><span class="badge">3-6月</span><h3>MVP</h3><p>完成模型和教师端。</p></div><div class="card"><span class="badge">6-12月</span><h3>商业验证</h3><p>20所学校与3个案例。</p></div><div class="card"><span class="badge">12-24月</span><h3>复制</h3><p>80-100所学校。</p></div></div></article>
+        </div>
+      </section>
+
+      <footer class="page-footer"><div><h2>框架落地页已经串联平台、产品和课堂。</h2><p>继续看三级页面，了解动力电池原理课堂如何具体交付。</p></div><a href="../solutions/ev3d-lab/battery-classroom.html">进入电池课堂</a></footer>
+    </main>
+  </div>
+  <script src="../assets/site.js"></script>
+</body>
+</html>

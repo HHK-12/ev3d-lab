@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#3B82F6">
+<meta name="color-scheme" content="light">
+<title>Auto3D Engine — 路演幻灯片</title>
+<style>
+/* ============== RESET & BASE ============== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif;color:#0F172A;overflow:hidden;height:100vh;background:linear-gradient(135deg,#F0F4FF 0%,#EDE9FE 40%,#F8FAFC 100%);touch-action:manipulation}
+
+/* ============== DECORATIVE BG ELEMENTS ============== */
+.bg-blob{position:fixed;border-radius:50%;filter:blur(100px);opacity:.35;pointer-events:none;z-index:0}
+.bg-blob-1{width:600px;height:600px;background:radial-gradient(circle,rgba(59,130,246,.25),transparent 70%);top:-150px;right:-100px;animation:floatBlob 12s ease-in-out infinite}
+.bg-blob-2{width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,.2),transparent 70%);bottom:-120px;left:-80px;animation:floatBlob 15s ease-in-out infinite reverse}
+.bg-blob-3{width:350px;height:350px;background:radial-gradient(circle,rgba(6,182,212,.18),transparent 70%);top:40%;left:50%;animation:floatBlob 18s ease-in-out infinite}
+@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-30px) scale(1.05)}66%{transform:translate(-20px,20px) scale(.95)}}
+
+/* ============== SLIDES CONTAINER ============== */
+.slides{position:relative;width:100%;height:100vh;z-index:1}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(24px,5vh,64px) clamp(16px,4vw,80px);opacity:0;transform:translateY(30px);transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.slide.active{opacity:1;transform:translateY(0);pointer-events:auto;z-index:2}
+
+/* ============== GLASS CARD ============== */
+.glass{background:rgba(255,255,255,.58);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.7);border-radius:24px;box-shadow:0 4px 32px rgba(59,130,246,.08),0 1px 3px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.8)}
+.glass-sm{border-radius:16px;box-shadow:0 2px 16px rgba(59,130,246,.06),0 1px 2px rgba(0,0,0,.03)}
+.glass-card{padding:clamp(20px,4vh,40px) clamp(20px,3vw,44px)}
+.glass-card-sm{padding:clamp(14px,2.5vh,24px) clamp(14px,2vw,28px)}
+
+/* ============== TYPOGRAPHY ============== */
+.slide-title{font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-.02em;line-height:1.25;text-wrap:balance;text-align:center}
+.slide-subtitle{font-size:clamp(.95rem,1.5vw,1.15rem);font-weight:400;color:#64748B;text-align:center;margin-top:.5em;text-wrap:balance}
+.section-tag{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#3B82F6;background:rgba(59,130,246,.1);padding:4px 14px;border-radius:100px;margin-bottom:1em}
+.gradient-text{background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ============== GRID LAYOUTS ============== */
+.grid-2,.grid-3,.grid-4{display:grid;gap:clamp(16px,2.5vw,28px);width:100%;max-width:1100px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+
+/* ============== ICON BOX ============== */
+.icon-box{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px}
+.icon-circle{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.icon-circle.blue{background:rgba(59,130,246,.12);color:#3B82F6}
+.icon-circle.purple{background:rgba(139,92,246,.12);color:#8B5CF6}
+.icon-circle.cyan{background:rgba(6,182,212,.12);color:#06B6D4}
+.icon-circle.amber{background:rgba(245,158,11,.12);color:#F59E0B}
+.icon-circle.emerald{background:rgba(16,185,129,.12);color:#10B981}
+.icon-box h3{font-size:1.05rem;font-weight:700;color:#0F172A}
+.icon-box p{font-size:.85rem;color:#64748B;line-height:1.55}
+
+/* ============== DATA HIGHLIGHT ============== */
+.data-row{display:flex;flex-wrap:wrap;gap:clamp(16px,3vw,36px);justify-content:center}
+.data-item{text-align:center;min-width:100px}
+.data-value{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
+.data-label{font-size:.8rem;color:#64748B;margin-top:6px;font-weight:500}
+
+/* ============== TIMELINE ============== */
+.timeline{display:flex;gap:0;width:100%;max-width:900px;position:relative}
+.timeline::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:3px;background:linear-gradient(90deg,#3B82F6,#8B5CF6,#06B6D4);border-radius:2px}
+.timeline-item{flex:1;text-align:center;position:relative;padding-top:48px}
+.timeline-dot{position:absolute;top:16px;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;border:3px solid #3B82F6;background:#fff;z-index:1;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+.timeline-item:nth-child(2) .timeline-dot{border-color:#8B5CF6;box-shadow:0 0 0 4px rgba(139,92,246,.12)}
+.timeline-item:nth-child(3) .timeline-dot{border-color:#06B6D4;box-shadow:0 0 0 4px rgba(6,182,212,.12)}
+.timeline-item h4{font-size:.95rem;font-weight:700;color:#0F172A}
+.timeline-year{font-size:.75rem;font-weight:700;color:#3B82F6;margin-bottom:4px}
+.timeline-item p{font-size:.78rem;color:#64748B;margin-top:6px;line-height:1.5}
+
+/* ============== TABLE STYLE ============== */
+.tbl-wrap{width:100%;max-width:1000px;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px}
+.tbl{width:100%;border-collapse:collapse;font-size:.82rem;font-variant-numeric:tabular-nums}
+.tbl th{background:rgba(59,130,246,.12);color:#0F172A;font-weight:700;padding:12px 14px;text-align:left;font-size:.8rem;white-space:nowrap}
+.tbl th:first-child{border-radius:12px 0 0 0}
+.tbl th:last-child{border-radius:0 12px 0 0}
+.tbl td{padding:11px 14px;border-bottom:1px solid rgba(59,130,246,.08);color:#334155;line-height:1.5}
+.tbl tr:last-child td:first-child{border-radius:0 0 0 12px}
+.tbl tr:last-child td:last-child{border-radius:0 0 12px 0}
+.tbl tr:last-child td{border-bottom:none;font-weight:700;background:rgba(59,130,246,.04)}
+.tbl td:first-child{font-weight:600;color:#0F172A}
+.tbl .num{text-align:center;font-variant-numeric:tabular-nums}
+.tbl .hl{color:#3B82F6;font-weight:700}
+
+/* ============== PROGRESS BAR ============== */
+.progress-bar{position:fixed;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#3B82F6,#8B5CF6,#06B6D4);transition:width .4s cubic-bezier(.4,0,.2,1);z-index:100}
+.progress-dots{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:100}
+.progress-dot{width:8px;height:8px;border-radius:50%;background:rgba(59,130,246,.25);transition:all .3s ease;cursor:pointer;border:none;padding:0}
+.progress-dot.active{background:#3B82F6;transform:scale(1.4);box-shadow:0 0 8px rgba(59,130,246,.4)}
+
+/* ============== SLIDE NAV ARROWS ============== */
+.nav-arrows{position:fixed;bottom:28px;right:28px;display:flex;gap:8px;z-index:100}
+.nav-btn{width:40px;height:40px;border-radius:50%;border:1px solid rgba(59,130,246,.2);background:rgba(255,255,255,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;color:#3B82F6;transition:all .2s ease;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.nav-btn:hover{background:#3B82F6;color:#fff;border-color:#3B82F6;transform:scale(1.05);box-shadow:0 4px 16px rgba(59,130,246,.25)}
+.nav-btn:focus-visible{outline:2px solid #3B82F6;outline-offset:3px}
+
+/* ============== COVER SLIDE ============== */
+.cover-badge{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:#3B82F6;background:rgba(59,130,246,.08);padding:8px 20px;border-radius:100px;margin-bottom:1.5em;letter-spacing:.02em}
+.cover-tagline{font-size:clamp(1rem,2vw,1.25rem);color:#64748B;font-weight:400;margin-top:.8em;text-wrap:balance}
+
+/* ============== KEYBOARD HINT ============== */
+.kb-hint{position:fixed;top:24px;right:28px;font-size:.7rem;color:#94A3B8;z-index:100;display:flex;align-items:center;gap:6px}
+.kb-hint kbd{display:inline-block;padding:2px 7px;border-radius:5px;font-size:.68rem;font-family:inherit;background:rgba(255,255,255,.6);border:1px solid rgba(59,130,246,.15);color:#64748B}
+
+/* ============== ANIMATIONS ============== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.a-fade-up{animation:fadeUp .6s cubic-bezier(.4,0,.2,1) both}
+.a-delay-1{animation-delay:.1s}
+.a-delay-2{animation-delay:.2s}
+.a-delay-3{animation-delay:.3s}
+.a-delay-4{animation-delay:.4s}
+
+@media (prefers-reduced-motion:reduce){
+  .slide{transition:opacity .2s ease}
+  .slide.active{transform:none}
+  .a-fade-up{animation:none;opacity:1}
+  .bg-blob{animation:none}
+}
+
+/* ============== RESPONSIVE ============== */
+@media (max-width:768px){
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;gap:12px}
+  .timeline{flex-direction:column;gap:20px}
+  .timeline::before{display:none}
+  .timeline-item{padding-top:0;padding-left:36px;text-align:left}
+  .timeline-dot{top:4px;left:0;transform:none}
+  .data-row{gap:16px}
+  .nav-arrows{bottom:16px;right:16px}
+  .progress-dots{bottom:12px}
+  .kb-hint{display:none}
+  .tbl{font-size:.72rem}
+  .tbl td,.tbl th{padding:8px 10px}
+}
+
+/* ============== GRADIENT BAR ============== */
+.grad-bar{width:60px;height:4px;border-radius:2px;margin:0 auto .8em}
+.grad-bar.blue{background:linear-gradient(90deg,#3B82F6,#06B6D4)}
+.grad-bar.purple{background:linear-gradient(90deg,#8B5CF6,#3B82F6)}
+.grad-bar.amber{background:linear-gradient(90deg,#F59E0B,#EF4444)}
+
+/* ============== FLOW ARROW ============== */
+.flow-row{display:flex;align-items:center;gap:clamp(8px,2vw,16px);justify-content:center;flex-wrap:wrap}
+.flow-item{text-align:center}
+.flow-arrow{font-size:1.3rem;color:#3B82F6;font-weight:300}
+
+/* Print */
+@media print{
+  body{overflow:auto;height:auto;background:#fff}
+  .slide{position:relative;opacity:1;transform:none;pointer-events:auto;page-break-after:always;min-height:100vh}
+  .progress-bar,.progress-dots,.nav-arrows,.kb-hint,.bg-blob{display:none}
+}
+.zsv-switcher{
+  position:fixed;
+  left:12px;
+  top:12px;
+  z-index:9999;
+  display:flex;
+  gap:6px;
+  align-items:center;
+  max-width:calc(100vw - 24px);
+  overflow:auto;
+  padding:6px;
+  border:1px solid rgba(59,130,246,.16);
+  border-radius:8px;
+  background:rgba(255,255,255,.76);
+  backdrop-filter:blur(14px) saturate(145%);
+  -webkit-backdrop-filter:blur(14px) saturate(145%);
+  box-shadow:0 12px 28px rgba(42,73,104,.12);
+}
+.zsv-switcher a{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:0 9px;
+  border-radius:6px;
+  color:#20374e;
+  font-size:12px;
+  font-weight:850;
+  white-space:nowrap;
+  text-decoration:none;
+}
+.zsv-switcher a:first-child{background:#12314b;color:#fff}
+</style>
+</head>
+<body>
+<div class="zsv-switcher" aria-label="智数维科技官网页面切换">
+  <a href="index.html">智数维官网</a>
+  <a href="platform/auto3d-engine.html">Auto3D</a>
+  <a href="solutions/ev3d-lab.html">EV3D</a>
+  <a href="strategy/framework.html">框架</a>
+</div>
+
+<!-- Decorative Background -->
+<div class="bg-blob bg-blob-1" aria-hidden="true"></div>
+<div class="bg-blob bg-blob-2" aria-hidden="true"></div>
+<div class="bg-blob bg-blob-3" aria-hidden="true"></div>
+
+<!-- Keyboard Hint -->
+<div class="kb-hint" aria-hidden="true">按 <kbd>←</kbd> <kbd>→</kbd> 或点击下方圆点翻页</div>
+
+<!-- Slides Container -->
+<main class="slides" id="slidesContainer" aria-label="路演幻灯片">
+
+  <!-- ==================== SLIDE 0: COVER ==================== -->
+  <section class="slide active" id="slide-0" aria-label="封面">
+    <div class="glass glass-card" style="max-width:720px;width:100%;text-align:center">
+      <div class="section-tag a-fade-up">AI + 数字孪生 · 汽车产业平台</div>
+      <h1 class="slide-title a-fade-up a-delay-1">
+        Auto3D <span class="gradient-text">Engine</span>
+      </h1>
+      <p class="cover-tagline a-fade-up a-delay-2">打造国内领先的汽车三维可视化知识平台</p>
+      <div class="grad-bar blue a-fade-up a-delay-2" style="margin:1.2em auto 0"></div>
+      <p class="a-fade-up a-delay-3" style="font-size:.85rem;color:#94A3B8;margin-top:1em">机密商业文件 · 2026年6月 · V2.0</p>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 1: PROJECT OVERVIEW ==================== -->
+  <section class="slide" id="slide-1" aria-label="项目概述">
+    <div class="glass glass-card" style="max-width:880px;width:100%">
+      <div class="section-tag">01 · 项目概述</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.6em">Auto3D Engine 是什么？</h2>
+      <p class="slide-subtitle" style="text-align:left;margin-bottom:1.5em">以 AI + 数字孪生为核心，覆盖教育、培训、研发、营销、认证的汽车产业平台</p>
+      <div class="grid-3">
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up">
+          <div class="icon-circle blue">🏫</div>
+          <h3>职业院校</h3>
+          <p>3000+院校，提供三维拆装教学、虚拟实训考核、数字化课程资源</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-1">
+          <div class="icon-circle purple">🏭</div>
+          <h3>汽车企业</h3>
+          <p>主机厂/4S集团/零部件企业，新车型培训 + 技术资料数字化</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-2">
+          <div class="icon-circle cyan">👤</div>
+          <h3>C端用户</h3>
+          <p>5000万+汽车爱好者、改装玩家、准车主、汽修从业者</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 2: PAIN POINTS ==================== -->
+  <section class="slide" id="slide-2" aria-label="市场痛点">
+    <div class="glass glass-card" style="max-width:960px;width:100%">
+      <div class="section-tag">02 · 市场痛点</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.6em">三大群体亟待解决的行业难题</h2>
+      <div class="grid-3" style="margin-top:1.2em">
+        <div class="glass glass-sm glass-card-sm a-fade-up">
+          <div class="icon-circle blue" style="margin-bottom:8px">🎓</div>
+          <h3 style="text-align:left;margin-bottom:6px">职业院校</h3>
+          <ul style="font-size:.82rem;color:#475569;line-height:1.8;list-style:none;padding:0">
+            <li>⚠ 实训设备昂贵（电池包 5-20万）</li>
+            <li>⚠ 新能源车型更新太快跟不上</li>
+            <li>⚠ 学生看不懂内部结构</li>
+            <li>⚠ 拆装实训耗时 & 耗材</li>
+          </ul>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-1">
+          <div class="icon-circle purple" style="margin-bottom:8px">🏢</div>
+          <h3 style="text-align:left;margin-bottom:6px">汽车企业</h3>
+          <ul style="font-size:.82rem;color:#475569;line-height:1.8;list-style:none;padding:0">
+            <li>⚠ 培训成本高，动辄每人上万元</li>
+            <li>⚠ 技术资料分散，知识难沉淀</li>
+            <li>⚠ 新员工上岗周期长（2-4周）</li>
+            <li>⚠ 海外培训难以标准化复制</li>
+          </ul>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-2">
+          <div class="icon-circle cyan" style="margin-bottom:8px">🔧</div>
+          <h3 style="text-align:left;margin-bottom:6px">汽车爱好者</h3>
+          <ul style="font-size:.82rem;color:#475569;line-height:1.8;list-style:none;padding:0">
+            <li>⚠ 缺少专业系统化学习平台</li>
+            <li>⚠ 视频讲解不够直观</li>
+            <li>⚠ 看不到内部结构</li>
+            <li>⚠ 改装知识碎片化</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 3: SOLUTION ==================== -->
+  <section class="slide" id="slide-3" aria-label="解决方案">
+    <div class="glass glass-card" style="max-width:960px;width:100%">
+      <div class="section-tag">03 · 解决方案</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.6em">三维数字孪生 — 一站式解决</h2>
+      <div class="grid-4" style="margin-top:1em">
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up">
+          <div class="icon-circle blue">🔩</div>
+          <h3>三维拆装</h3>
+          <p>一键拆解发动机、变速箱、电池包、电机，展示结构与原理</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-1">
+          <div class="icon-circle purple">⚡</div>
+          <h3>动态原理</h3>
+          <p>四冲程动画、电磁转换、换挡逻辑实时演示</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-2">
+          <div class="icon-circle cyan">🔍</div>
+          <h3>故障模拟</h3>
+          <p>200+故障场景，演示故障原因→位置→排查全流程</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-3">
+          <div class="icon-circle emerald">🥽</div>
+          <h3>AR / VR</h3>
+          <p>佩戴VR设备进入发动机内部，打造元宇宙汽车课堂</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 4: PRODUCT MATRIX ==================== -->
+  <section class="slide" id="slide-4" aria-label="产品矩阵">
+    <div class="glass glass-card" style="max-width:1000px;width:100%">
+      <div class="section-tag">04 · 产品矩阵</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:1em">五大产品线，全覆盖客户需求</h2>
+      <div class="tbl-wrap glass glass-sm">
+        <table class="tbl">
+          <thead>
+            <tr><th>产品</th><th>形态</th><th>目标客户</th><th>核心价值</th><th>定价</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Auto3D 教学平台</td><td>SaaS</td><td>职业院校</td><td>三维教学·虚拟实训·考核闭环</td><td class="num">1-10万/年</td></tr>
+            <tr><td>Auto3D Enterprise</td><td>私有部署</td><td>主机厂/4S集团</td><td>培训周期 2周→3天</td><td class="num">10-100万+</td></tr>
+            <tr><td>Auto3D Lab</td><td>软硬一体</td><td>院校整体方案</td><td>数字实训室·替代实体设备</td><td class="num">20-100万</td></tr>
+            <tr><td>Auto3D AI 导师</td><td>SaaS插件</td><td>全客户层</td><td>"汽车版ChatGPT"·AI即时讲解</td><td class="num">增值模块</td></tr>
+            <tr><td>Auto3D Assets</td><td>项目制</td><td>车企/供应商</td><td>高精度3D模型·数字展厅</td><td class="num">5-200万</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 5: MARKET SIZE ==================== -->
+  <section class="slide" id="slide-5" aria-label="市场规模">
+    <div class="glass glass-card" style="max-width:900px;width:100%">
+      <div class="section-tag">05 · 市场分析</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.3em">巨大的蓝海市场</h2>
+      <p class="slide-subtitle" style="text-align:left;margin-bottom:1.5em">中国汽车数字孪生教育市场 2030E 突破<strong style="color:#3B82F6">250亿元</strong></p>
+      <div class="data-row a-fade-up">
+        <div class="data-item">
+          <div class="data-value">3,000+</div>
+          <div class="data-label">职业院校</div>
+        </div>
+        <div class="data-item">
+          <div class="data-value">300万+</div>
+          <div class="data-label">后市场从业者</div>
+        </div>
+        <div class="data-item">
+          <div class="data-value">40%</div>
+          <div class="data-label">市场年增速</div>
+        </div>
+        <div class="data-item">
+          <div class="data-value">250亿</div>
+          <div class="data-label">2030E总市场</div>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-top:2em">
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-1">
+          <h3 style="font-size:.9rem;color:#0F172A;margin-bottom:8px">PEST 利好叠加</h3>
+          <p style="font-size:.8rem;color:#64748B;line-height:1.6">职教数字化政策密集出台 · 新能源汽车渗透率突破50% · WebGPU/5G技术成熟 · Z世代偏好互动化学习</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-2">
+          <h3 style="font-size:.9rem;color:#0F172A;margin-bottom:8px">细分赛道空间</h3>
+          <p style="font-size:.8rem;color:#64748B;line-height:1.6">院校市场 60-100亿 · 企业培训 80-120亿 · C端用户 10-15亿 · 数字资产服务 30-50亿</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 6: COMPETITIVE ==================== -->
+  <section class="slide" id="slide-6" aria-label="竞争格局">
+    <div class="glass glass-card" style="max-width:1000px;width:100%">
+      <div class="section-tag">06 · 竞争格局</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.6em">为什么我们是唯一的？</h2>
+      <p class="slide-subtitle" style="text-align:left;margin-bottom:1em">市场上尚无「三维交互 + AI 诊断 + 数字孪生」一体化平台</p>
+      <div class="grid-2" style="margin-top:1em">
+        <div class="glass glass-sm glass-card-sm a-fade-up" style="border-left:3px solid #9CA3AF">
+          <h3 style="font-size:.9rem;color:#64748B">竞品现状</h3>
+          <ul style="font-size:.8rem;color:#64748B;line-height:1.7;list-style:none;padding:0;margin-top:6px">
+            <li>传统教学软件 → Flash/视频为主，无三维交互</li>
+            <li>视频平台 → 被动观看，无操作实践</li>
+            <li>AI工具 → 通用AI，缺汽车专业深度</li>
+            <li>VR方案 → 硬件门槛高，成本大</li>
+          </ul>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-1" style="border-left:3px solid #3B82F6">
+          <h3 style="font-size:.9rem;color:#3B82F6">Auto3D 优势</h3>
+          <ul style="font-size:.8rem;color:#334155;line-height:1.7;list-style:none;padding:0;margin-top:6px">
+            <li>✓ 全三维实时交互引擎</li>
+            <li>✓ 学-练-考一体化闭环</li>
+            <li>✓ 汽车专属知识图谱 + AI</li>
+            <li>✓ Web端为主，零部署门槛</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 7: BUSINESS MODEL ==================== -->
+  <section class="slide" id="slide-7" aria-label="商业模式">
+    <div class="glass glass-card" style="max-width:1000px;width:100%">
+      <div class="section-tag">07 · 商业模式</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.6em">五层收入模型，多元盈利结构</h2>
+      <div class="grid-3" style="margin-top:1em">
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up">
+          <div class="icon-circle blue">📡</div>
+          <h3>院校 SaaS</h3>
+          <p>1-10万/年/校<br>按模块阶梯定价<br><span style="color:#10B981;font-weight:700">毛利率 85%+</span></p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-1">
+          <div class="icon-circle purple">🏭</div>
+          <h3>企业私有部署</h3>
+          <p>10-100万+/项目<br>定制车型+私有化<br><span style="color:#10B981;font-weight:700">毛利率 70%+</span></p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-2">
+          <div class="icon-circle amber">💎</div>
+          <h3>数字资产服务</h3>
+          <p>5-200万/项目<br>三维模型定制<br><span style="color:#10B981;font-weight:700">利润最高业务线</span></p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-1">
+          <div class="icon-circle cyan">📚</div>
+          <h3>课程内容</h3>
+          <p>980-4980元/课程<br>新能源专题包<br><span style="color:#10B981;font-weight:700">毛利率 90%+</span></p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-2">
+          <div class="icon-circle emerald">👥</div>
+          <h3>会员订阅</h3>
+          <p>39元/月·299元/年<br>C端个人用户<br><span style="color:#10B981;font-weight:700">毛利率 95%+</span></p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-3" style="justify-content:center">
+          <div style="font-size:2rem;font-weight:800" class="gradient-text">2028E</div>
+          <p style="font-size:.85rem;color:#64748B">预计总收入<br><strong style="font-size:1.2rem;color:#3B82F6">18亿元</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 8: PLATFORM ARCHITECTURE ==================== -->
+  <section class="slide" id="slide-8" aria-label="平台架构">
+    <div class="glass glass-card" style="max-width:860px;width:100%;text-align:center">
+      <div class="section-tag">08 · 平台架构</div>
+      <h2 class="slide-title" style="margin-bottom:1.2em">AI + 数字孪生汽车产业平台</h2>
+      <div class="flow-row a-fade-up" style="flex-direction:column;gap:0">
+        <!-- Top -->
+        <div class="glass glass-sm glass-card-sm" style="background:linear-gradient(135deg,rgba(30,58,95,.08),rgba(59,130,246,.06));width:80%;max-width:500px">
+          <h3 style="font-size:1rem;color:#1E3A5F;margin:0">🧠 AI 汽车大脑</h3>
+          <p style="font-size:.75rem;color:#64748B;margin-top:4px">智能诊断 · 知识图谱 · AI导师</p>
+        </div>
+        <div style="font-size:1.2rem;color:#3B82F6;margin:4px 0">│</div>
+        <!-- Middle row -->
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%">
+          <div class="glass glass-sm glass-card-sm" style="flex:1;min-width:140px;max-width:220px;text-align:center;background:rgba(59,130,246,.04)">
+            <h3 style="font-size:.85rem;color:#2563EB">🏫 职业教育</h3>
+            <p style="font-size:.7rem;color:#64748B;margin-top:2px">SaaS平台·数字实训室·认证</p>
+          </div>
+          <div class="glass glass-sm glass-card-sm" style="flex:1;min-width:140px;max-width:220px;text-align:center;background:rgba(139,92,246,.04)">
+            <h3 style="font-size:.85rem;color:#7C3AED">🏭 企业培训</h3>
+            <p style="font-size:.7rem;color:#64748B;margin-top:2px">私有部署·数字资产·定制</p>
+          </div>
+          <div class="glass glass-sm glass-card-sm" style="flex:1;min-width:140px;max-width:220px;text-align:center;background:rgba(6,182,212,.04)">
+            <h3 style="font-size:.85rem;color:#0891B2">👤 汽车社区</h3>
+            <p style="font-size:.7rem;color:#64748B;margin-top:2px">会员订阅·技术社区·认证</p>
+          </div>
+        </div>
+        <div style="font-size:1.2rem;color:#3B82F6;margin:4px 0">│</div>
+        <!-- Bottom engine -->
+        <div class="glass glass-sm glass-card-sm" style="background:linear-gradient(135deg,rgba(217,119,6,.08),rgba(245,158,11,.05));width:80%;max-width:500px">
+          <h3 style="font-size:1rem;color:#D97706;margin:0">⚙ 三维数字孪生引擎</h3>
+          <p style="font-size:.75rem;color:#64748B;margin-top:4px">Web3D · AR · VR · 多端适配</p>
+        </div>
+        <div style="font-size:1.2rem;color:#3B82F6;margin:4px 0">│</div>
+        <!-- Database -->
+        <div class="glass glass-sm glass-card-sm" style="background:rgba(75,85,99,.06);width:90%;max-width:600px">
+          <h3 style="font-size:.85rem;color:#4B5563;margin:0">🗄 发动机 · 电池 · 电机 · 整车 · 故障知识库</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 9: TARGET & STRATEGY ==================== -->
+  <section class="slide" id="slide-9" aria-label="目标客户与策略">
+    <div class="glass glass-card" style="max-width:900px;width:100%">
+      <div class="section-tag">09 · 三阶段拓展策略</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:1.2em">从院校到企业到C端 — 阶梯式扩张</h2>
+      <div class="timeline a-fade-up">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2026</div>
+          <h4>第一阶段 · 市场验证</h4>
+          <p>100所示范校<br>打造10所标杆<br>营收突破3,500万</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2027-2028</div>
+          <h4>第二阶段 · 规模复制</h4>
+          <p>1000+院校 / 50+企业<br>签约比亚迪/吉利<br>A轮融资</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2029-2030</div>
+          <h4>第三阶段 · 生态扩展</h4>
+          <p>院校覆盖率 50%+<br>C端用户50万+<br>拓展海外·启动IPO</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 10: CORE BARRIERS ==================== -->
+  <section class="slide" id="slide-10" aria-label="核心壁垒">
+    <div class="glass glass-card" style="max-width:960px;width:100%">
+      <div class="section-tag">10 · 核心壁垒</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.6em">三重竞争护城河</h2>
+      <p class="slide-subtitle" style="text-align:left;margin-bottom:1.2em">壁垒随业务增长自我强化，形成「越用越强」的正循环飞轮</p>
+      <div class="grid-3">
+        <div class="glass glass-sm glass-card-sm a-fade-up" style="border-top:3px solid #3B82F6">
+          <div class="icon-circle blue" style="margin-bottom:10px">🗄</div>
+          <h3>数据壁垒</h3>
+          <p style="font-size:.82rem;color:#64748B;line-height:1.6;margin-top:6px">50+发动机 · 30+变速箱<br>200+故障场景<br>5000+知识点关联<br><em style="color:#3B82F6">单模型200-500人时，先发优势显著</em></p>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-1" style="border-top:3px solid #8B5CF6">
+          <div class="icon-circle purple" style="margin-bottom:10px">📖</div>
+          <h3>内容壁垒</h3>
+          <p style="font-size:.82rem;color:#64748B;line-height:1.6;margin-top:6px">200+课时标准化课程<br>对标教育部专业标准<br>故障码→三维→诊断<br><em style="color:#8B5CF6">独特内容组织形成专利布局</em></p>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-2" style="border-top:3px solid #06B6D4">
+          <div class="icon-circle cyan" style="margin-bottom:10px">🤖</div>
+          <h3>AI 壁垒</h3>
+          <p style="font-size:.82rem;color:#64748B;line-height:1.6;margin-top:6px">汽车垂直领域知识图谱<br>真实维修数据训练<br>AI诊断引擎<br><em style="color:#06B6D4">提问越多→AI越聪明→用户越多</em></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 11: GROWTH DIRECTIONS ==================== -->
+  <section class="slide" id="slide-11" aria-label="增长方向">
+    <div class="glass glass-card" style="max-width:960px;width:100%">
+      <div class="section-tag">11 · 增长方向</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.6em">五大未来增长引擎</h2>
+      <p class="slide-subtitle" style="text-align:left;margin-bottom:1em">这些方向最容易吸引投资人</p>
+      <div class="grid-2">
+        <div class="glass glass-sm glass-card-sm a-fade-up" style="display:flex;gap:12px;align-items:flex-start">
+          <div class="icon-circle blue" style="flex-shrink:0">⚡</div>
+          <div><h3 style="font-size:.9rem">新能源数字教学</h3><p style="font-size:.78rem;color:#64748B;line-height:1.5">电池包·BMS·电机·电控<br>未来5-10年最大增量市场</p></div>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-1" style="display:flex;gap:12px;align-items:flex-start">
+          <div class="icon-circle purple" style="flex-shrink:0">🏗</div>
+          <div><h3 style="font-size:.9rem">数字孪生实验室</h3><p style="font-size:.78rem;color:#64748B;line-height:1.5">单校20-100万·替代实体设备<br>全国2000+院校，市场40亿+</p></div>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-2" style="display:flex;gap:12px;align-items:flex-start">
+          <div class="icon-circle cyan" style="flex-shrink:0">🤖</div>
+          <div><h3 style="font-size:.9rem">汽车 AI 导师</h3><p style="font-size:.78rem;color:#64748B;line-height:1.5">"汽车版ChatGPT"<br>自然语言→三维讲解→检测方案</p></div>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-3" style="display:flex;gap:12px;align-items:flex-start">
+          <div class="icon-circle emerald" style="flex-shrink:0">📜</div>
+          <div><h3 style="font-size:.9rem">维修认证平台</h3><p style="font-size:.78rem;color:#64748B;line-height:1.5">新能源·电池·智驾认证<br>培训→考试→认证→就业闭环</p></div>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-4" style="display:flex;gap:12px;align-items:flex-start;grid-column:1/-1">
+          <div class="icon-circle amber" style="flex-shrink:0">🌐</div>
+          <div><h3 style="font-size:.9rem">车企数字展厅</h3><p style="font-size:.78rem;color:#64748B;line-height:1.5">面向主机厂，整车可交互三维展示 · 用于展会/官网/海外推广 · 市场空间非常大</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 12: FINANCIAL ==================== -->
+  <section class="slide" id="slide-12" aria-label="财务预测">
+    <div class="glass glass-card" style="max-width:960px;width:100%">
+      <div class="section-tag">12 · 财务预测</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.6em">高速增长的财务模型</h2>
+      <p class="slide-subtitle" style="text-align:left;margin-bottom:1em">保守估计，2030年营收突破<strong style="color:#3B82F6">48亿元</strong></p>
+      <div class="data-row a-fade-up" style="margin-bottom:1.5em">
+        <div class="data-item"><div class="data-value">3,500万</div><div class="data-label">2026 营收 · 起步年</div></div>
+        <div style="font-size:1.5rem;color:#CBD5E1;display:flex;align-items:center">→</div>
+        <div class="data-item"><div class="data-value">9,000万</div><div class="data-label">2027E 营收</div></div>
+        <div style="font-size:1.5rem;color:#CBD5E1;display:flex;align-items:center">→</div>
+        <div class="data-item"><div class="data-value">1.8亿</div><div class="data-label">2028E 营收</div></div>
+        <div style="font-size:1.5rem;color:#CBD5E1;display:flex;align-items:center">→</div>
+        <div class="data-item"><div class="data-value">48亿</div><div class="data-label">2030E 营收</div></div>
+      </div>
+      <div class="tbl-wrap glass glass-sm">
+        <table class="tbl">
+          <thead>
+            <tr><th>指标</th><th>2026E</th><th>2027E</th><th>2028E</th><th>2029E</th><th>2030E</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>营业收入（万元）</td><td class="num">3,500</td><td class="num">9,000</td><td class="num">18,000</td><td class="num">31,000</td><td class="num hl">48,000</td></tr>
+            <tr><td>毛利率</td><td class="num">75%</td><td class="num">78%</td><td class="num">82%</td><td class="num">84%</td><td class="num hl">85%+</td></tr>
+            <tr><td>净利润（万元）</td><td class="num">300</td><td class="num">2,200</td><td class="num">5,800</td><td class="num">11,500</td><td class="num hl" style="color:#10B981">20,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 13: FUNDING ==================== -->
+  <section class="slide" id="slide-13" aria-label="融资计划">
+    <div class="glass glass-card" style="max-width:860px;width:100%">
+      <div class="section-tag">13 · 融资计划</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.6em">天使轮 · 5,000万元</h2>
+      <div class="grid-2" style="margin-top:1em">
+        <div class="glass glass-sm glass-card-sm a-fade-up">
+          <h3 style="font-size:.9rem;color:#0F172A;margin-bottom:10px">本轮详情</h3>
+          <table style="width:100%;font-size:.82rem;border-collapse:collapse">
+            <tr><td style="padding:6px 8px;color:#64748B;border-bottom:1px solid rgba(0,0,0,.04)">融资金额</td><td style="padding:6px 8px;font-weight:700;color:#3B82F6;border-bottom:1px solid rgba(0,0,0,.04)">5,000 万元</td></tr>
+            <tr><td style="padding:6px 8px;color:#64748B;border-bottom:1px solid rgba(0,0,0,.04)">出让股权</td><td style="padding:6px 8px;font-weight:700;border-bottom:1px solid rgba(0,0,0,.04)">10% - 15%</td></tr>
+            <tr><td style="padding:6px 8px;color:#64748B;border-bottom:1px solid rgba(0,0,0,.04)">投前估值</td><td style="padding:6px 8px;font-weight:700;border-bottom:1px solid rgba(0,0,0,.04)">3.3 - 4.5 亿元</td></tr>
+            <tr><td style="padding:6px 8px;color:#64748B">资金周期</td><td style="padding:6px 8px;font-weight:700">24 个月</td></tr>
+          </table>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-1">
+          <h3 style="font-size:.9rem;color:#0F172A;margin-bottom:10px">资金用途</h3>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:40%;height:8px;background:#3B82F6;border-radius:4px"></div><span style="font-size:.78rem;color:#334155">产品研发 40%</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:25%;height:8px;background:#8B5CF6;border-radius:4px"></div><span style="font-size:.78rem;color:#334155">模型数据库 25%</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:20%;height:8px;background:#06B6D4;border-radius:4px"></div><span style="font-size:.78rem;color:#334155">市场拓展 20%</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:15%;height:8px;background:#F59E0B;border-radius:4px"></div><span style="font-size:.78rem;color:#334155">团队建设 15%</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="glass glass-sm glass-card-sm a-fade-up a-delay-2" style="margin-top:16px;display:flex;gap:16px;flex-wrap:wrap;justify-content:space-around">
+        <div style="text-align:center"><div style="font-size:.8rem;color:#64748B">A 轮 (2027)</div><div style="font-size:1.1rem;font-weight:800;color:#3B82F6">1.5-2亿</div><div style="font-size:.72rem;color:#94A3B8">估值 15-20亿</div></div>
+        <div style="text-align:center"><div style="font-size:.8rem;color:#64748B">B 轮 (2029)</div><div style="font-size:1.1rem;font-weight:800;color:#8B5CF6">3-5亿</div><div style="font-size:.72rem;color:#94A3B8">估值 50-80亿</div></div>
+        <div style="text-align:center"><div style="font-size:.8rem;color:#64748B">退出路径</div><div style="font-size:1.1rem;font-weight:800;color:#10B981">IPO / 并购</div><div style="font-size:.72rem;color:#94A3B8">目标估值 600-1000亿</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 14: TEAM ==================== -->
+  <section class="slide" id="slide-14" aria-label="核心团队">
+    <div class="glass glass-card" style="max-width:880px;width:100%">
+      <div class="section-tag">14 · 核心团队</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:.8em">汽车 + 互联网 双栖团队</h2>
+      <div class="grid-3" style="margin-top:.5em">
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up">
+          <div class="icon-circle blue">👔</div>
+          <h3>CEO / 创始人</h3>
+          <p style="font-size:.78rem">汽车工程背景<br>10年+行业经验<br>曾任职头部主机厂</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-1">
+          <div class="icon-circle purple">💻</div>
+          <h3>CTO</h3>
+          <p style="font-size:.78rem">计算机图形学博士<br>前Unity/Epic引擎工程师<br>8年3D渲染经验</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-2">
+          <div class="icon-circle cyan">📱</div>
+          <h3>CPO</h3>
+          <p style="font-size:.78rem">前互联网教育产品总监<br>主导百万用户平台<br>深刻理解教育场景</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-1">
+          <div class="icon-circle amber">🔧</div>
+          <h3>首席汽车专家</h3>
+          <p style="font-size:.78rem">高级技师/考评员<br>30年维修经验<br>多部教材编写</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-2">
+          <div class="icon-circle emerald">🧠</div>
+          <h3>AI 技术负责人</h3>
+          <p style="font-size:.78rem">前大厂NLP工程师<br>知识图谱 + 大模型<br>垂直领域应用专家</p>
+        </div>
+        <div class="glass glass-sm glass-card-sm icon-box a-fade-up a-delay-3">
+          <div class="icon-circle blue" style="background:rgba(59,130,246,.08)">👥</div>
+          <h3>首年团队</h3>
+          <p style="font-size:.78rem">30人精干编制<br>研发12·教研6<br>销售6·运营6</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 15: INVESTMENT HIGHLIGHTS ==================== -->
+  <section class="slide" id="slide-15" aria-label="投资亮点">
+    <div class="glass glass-card" style="max-width:860px;width:100%">
+      <div class="section-tag">15 · 投资亮点</div>
+      <h2 class="slide-title" style="text-align:left;margin-bottom:1em">为什么值得投资？</h2>
+      <div class="grid-2">
+        <div class="glass glass-sm glass-card-sm a-fade-up" style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-size:1.5rem;flex-shrink:0">🎯</span>
+          <div><h3 style="font-size:.9rem">精准卡位蓝海</h3><p style="font-size:.78rem;color:#64748B;line-height:1.5">汽车数字教育第一平台，尚无直接竞品，先发优势窗口期 12-18 个月</p></div>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-1" style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-size:1.5rem;flex-shrink:0">💎</span>
+          <div><h3 style="font-size:.9rem">高壁垒护城河</h3><p style="font-size:.78rem;color:#64748B;line-height:1.5">数据+内容+AI三重壁垒，越用越强，跟随规模增长自我强化</p></div>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-2" style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-size:1.5rem;flex-shrink:0">💰</span>
+          <div><h3 style="font-size:.9rem">多元盈利模型</h3><p style="font-size:.78rem;color:#64748B;line-height:1.5">SaaS+私有部署+资产定制+会员+课程，五线并行，毛利率70-95%</p></div>
+        </div>
+        <div class="glass glass-sm glass-card-sm a-fade-up a-delay-3" style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-size:1.5rem;flex-shrink:0">📈</span>
+          <div><h3 style="font-size:.9rem">高速增长模型</h3><p style="font-size:.78rem;color:#64748B;line-height:1.5">CAGR 120%+，2027年盈亏平衡，2030年净利润率42%，目标IPO估值600-1000亿</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 16: THANK YOU ==================== -->
+  <section class="slide" id="slide-16" aria-label="结束页">
+    <div class="glass glass-card" style="max-width:640px;width:100%;text-align:center">
+      <div class="grad-bar blue" style="margin-bottom:1.5em"></div>
+      <h1 class="slide-title" style="font-size:clamp(2rem,5vw,3rem)">
+        Auto3D <span class="gradient-text">Engine</span>
+      </h1>
+      <p style="font-size:1.1rem;color:#64748B;margin:1em 0">AI + 数字孪生 · 重新定义汽车教育</p>
+      <div class="grad-bar purple" style="margin:1.5em auto 1em"></div>
+      <p style="font-size:.9rem;color:#0F172A;font-weight:600;margin-bottom:4px">期待与您深入交流</p>
+      <p style="font-size:.82rem;color:#94A3B8">联系我们获取完整商业企划书</p>
+      <p style="font-size:.75rem;color:#CBD5E1;margin-top:2em">机密商业文件 · 2026年6月</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Navigation -->
+<div class="progress-bar" id="progressBar" aria-hidden="true"></div>
+<div class="progress-dots" id="progressDots" role="tablist" aria-label="幻灯片导航"></div>
+<nav class="nav-arrows" aria-label="翻页控制">
+  <button class="nav-btn" id="btnPrev" aria-label="上一页" title="上一页 (←)">←</button>
+  <button class="nav-btn" id="btnNext" aria-label="下一页" title="下一页 (→)">→</button>
+</nav>
+
+<script>
+/* ============== SLIDE NAVIGATION ENGINE ============== */
+(function(){
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+let current = 0;
+
+// Build dot navigation
+const dotsContainer = document.getElementById('progressDots');
+slides.forEach((_, i) => {
+  const dot = document.createElement('button');
+  dot.className = 'progress-dot';
+  dot.setAttribute('role', 'tab');
+  dot.setAttribute('aria-label', `跳转到第 ${i + 1} 页`);
+  dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+  dot.addEventListener('click', () => goTo(i));
+  dotsContainer.appendChild(dot);
+});
+const dots = Array.from(dotsContainer.querySelectorAll('.progress-dot'));
+
+function updateUI() {
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === current);
+    // Reset animations when a slide becomes active
+    if (i === current) {
+      s.querySelectorAll('.a-fade-up').forEach(el => {
+        el.style.animation = 'none';
+        el.offsetHeight; // trigger reflow
+        el.style.animation = '';
+      });
+    }
+  });
+  dots.forEach((d, i) => {
+    d.classList.toggle('active', i === current);
+    d.setAttribute('aria-selected', i === current ? 'true' : 'false');
+  });
+  document.getElementById('progressBar').style.width = ((current + 1) / total * 100) + '%';
+  document.getElementById('btnPrev').style.visibility = current === 0 ? 'hidden' : 'visible';
+  document.getElementById('btnNext').style.visibility = current === total - 1 ? 'hidden' : 'visible';
+}
+
+function goTo(index) {
+  if (index < 0 || index >= total || index === current) return;
+  current = index;
+  updateUI();
+}
+
+function next() { goTo(current + 1); }
+function prev() { goTo(current - 1); }
+
+// Button handlers
+document.getElementById('btnNext').addEventListener('click', next);
+document.getElementById('btnPrev').addEventListener('click', prev);
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault();
+    next();
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    prev();
+  } else if (e.key === 'Home') {
+    e.preventDefault();
+    goTo(0);
+  } else if (e.key === 'End') {
+    e.preventDefault();
+    goTo(total - 1);
+  }
+});
+
+// Touch swipe support
+let touchStartX = 0;
+let touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  const dy = e.changedTouches[0].screenY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+    if (dx < 0) next();
+    else prev();
+  }
+}, { passive: true });
+
+// Mouse wheel navigation (throttled)
+let wheelTimeout;
+document.addEventListener('wheel', (e) => {
+  if (wheelTimeout) return;
+  wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 800);
+  if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && Math.abs(e.deltaY) > 30) {
+    if (e.deltaY > 0) next();
+    else prev();
+  }
+}, { passive: true });
+
+// Initial
+updateUI();
+})();
+</script>
+</body>
+</html>

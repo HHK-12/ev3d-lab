@@ -3,1824 +3,210 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#f4fbf8" />
-  <meta name="color-scheme" content="light" />
-  <title>EV3D Lab | 新能源汽车职业教育三维实训系统</title>
-  <link rel="preconnect" href="https://unpkg.com" />
+  <title>智数维科技 | AI + 数字孪生汽车产业平台</title>
+  <link rel="stylesheet" href="assets/site.css" />
   <style>
-    :root{
-      --ink:#102033;
-      --muted:#65758b;
-      --line:rgba(63,91,124,.16);
-      --glass:rgba(255,255,255,.62);
-      --glass-strong:rgba(255,255,255,.78);
-      --green:#18a77d;
-      --cyan:#1897b8;
-      --blue:#256fc4;
-      --amber:#d99019;
-      --red:#d84a4a;
-      --panel-shadow:0 18px 48px rgba(42,73,104,.13), inset 0 1px 0 rgba(255,255,255,.86);
-      --radius:8px;
-    }
-
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      min-height:100vh;
-      font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-      color:var(--ink);
-      background:
-        linear-gradient(132deg,#f7fff9 0%,#eaf7f1 31%,#eef7ff 66%,#fff7e8 100%);
-      overflow-x:hidden;
-    }
-
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      background-image:
-        linear-gradient(rgba(16,32,51,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(16,32,51,.045) 1px, transparent 1px);
-      background-size:44px 44px;
-      mask-image:linear-gradient(to bottom,rgba(0,0,0,.82),rgba(0,0,0,.2) 62%,transparent);
-      z-index:-1;
-    }
-
-    a{color:inherit;text-decoration:none}
-    button{font:inherit}
-
-    .app-shell{
-      width:min(1480px,calc(100% - 32px));
-      margin:0 auto;
-      padding:18px 0 42px;
-    }
-
-    .topbar{
-      position:sticky;
-      top:12px;
-      z-index:20;
-      display:grid;
-      grid-template-columns:auto 1fr auto;
-      align-items:center;
-      gap:20px;
-      padding:10px 12px;
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:rgba(255,255,255,.56);
-      backdrop-filter:blur(18px) saturate(150%);
-      -webkit-backdrop-filter:blur(18px) saturate(150%);
-      box-shadow:0 10px 28px rgba(42,73,104,.09);
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-    }
-
-    .brand-mark{
-      width:36px;
-      height:36px;
-      border-radius:8px;
-      background:linear-gradient(135deg,#15a980,#1a87bf);
-      display:grid;
-      place-items:center;
-      color:white;
-      box-shadow:0 10px 22px rgba(24,151,184,.22);
-      flex:none;
-    }
-
-    .brand h1{
-      margin:0;
-      font-size:17px;
-      letter-spacing:0;
-      line-height:1.15;
-    }
-
-    .brand span{
-      display:block;
-      color:var(--muted);
-      font-size:12px;
-      margin-top:2px;
-      font-weight:500;
-    }
-
-    .nav{
-      display:flex;
-      justify-content:center;
-      gap:4px;
-      min-width:0;
-    }
-
-    .nav a{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      height:36px;
-      padding:0 12px;
-      border-radius:7px;
-      color:#43546a;
-      font-size:14px;
-      white-space:nowrap;
-    }
-
-    .nav a:hover{background:rgba(255,255,255,.7);color:var(--ink)}
-
-    .top-actions{display:flex;gap:8px;align-items:center}
-
-    .icon-btn,.primary-btn,.ghost-btn,.mode-btn{
-      border:1px solid var(--line);
-      border-radius:7px;
-      background:rgba(255,255,255,.72);
-      color:var(--ink);
-      min-height:36px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:7px;
-      padding:0 11px;
-      cursor:pointer;
-      transition:transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
-    }
-
-    .icon-btn{width:36px;padding:0}
-    .primary-btn{
-      background:linear-gradient(135deg,#148d75,#197ab1);
-      color:white;
-      border-color:rgba(18,118,155,.18);
-      box-shadow:0 10px 22px rgba(25,122,177,.2);
-      font-weight:700;
-    }
-
-    .ghost-btn{font-weight:650;color:#305168}
-    .icon-btn:hover,.primary-btn:hover,.ghost-btn:hover,.mode-btn:hover{transform:translateY(-1px)}
-    .mode-btn.active{
-      background:#12314b;
-      color:white;
-      border-color:#12314b;
-      box-shadow:0 10px 22px rgba(18,49,75,.18);
-    }
-
-    svg.lucide{width:17px;height:17px;stroke-width:2}
-
-    .hero{
-      min-height:calc(100vh - 96px);
-      display:grid;
-      grid-template-columns:minmax(230px,310px) minmax(0,1fr) minmax(260px,342px);
-      grid-template-rows:auto minmax(500px,1fr);
-      gap:14px;
-      padding-top:14px;
-    }
-
-    .intro{
-      grid-column:1 / -1;
-      display:grid;
-      grid-template-columns:minmax(0,1.1fr) auto;
-      align-items:end;
-      gap:24px;
-      padding:20px 22px;
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:var(--glass);
-      backdrop-filter:blur(20px) saturate(145%);
-      -webkit-backdrop-filter:blur(20px) saturate(145%);
-      box-shadow:var(--panel-shadow);
-    }
-
-    .eyebrow{
-      display:inline-flex;
-      align-items:center;
-      gap:7px;
-      color:#136b68;
-      font-size:13px;
-      font-weight:800;
-      margin-bottom:10px;
-    }
-
-    .intro h2{
-      margin:0;
-      font-size:clamp(30px,4.4vw,62px);
-      line-height:1.05;
-      letter-spacing:0;
-      max-width:820px;
-    }
-
-    .intro p{
-      margin:12px 0 0;
-      color:#506177;
-      max-width:760px;
-      font-size:16px;
-      line-height:1.7;
-    }
-
-    .metrics{
-      display:grid;
-      grid-template-columns:repeat(3,108px);
-      gap:8px;
-    }
-
-    .metric{
-      border:1px solid rgba(63,91,124,.14);
-      border-radius:7px;
-      background:rgba(255,255,255,.55);
-      padding:12px;
-      min-height:86px;
-    }
-
-    .metric strong{
-      display:block;
-      font-size:24px;
-      color:#0f6f7a;
-      letter-spacing:0;
-    }
-
-    .metric span{
-      display:block;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.35;
-      margin-top:5px;
-    }
-
-    .panel{
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:var(--glass);
-      backdrop-filter:blur(22px) saturate(150%);
-      -webkit-backdrop-filter:blur(22px) saturate(150%);
-      box-shadow:var(--panel-shadow);
-      min-width:0;
-    }
-
-    .left-panel,.right-panel{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      padding:12px;
-      min-height:0;
-    }
-
-    .section-title{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin:0 0 10px;
-      color:#20374e;
-      font-size:13px;
-      font-weight:850;
-    }
-
-    .section-title span{
-      display:flex;
-      align-items:center;
-      gap:7px;
-    }
-
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      border-radius:999px;
-      padding:4px 8px;
-      font-size:12px;
-      font-weight:750;
-      color:#136b68;
-      background:rgba(25,167,125,.1);
-    }
-
-    .module-list{
-      display:grid;
-      gap:8px;
-    }
-
-    .module{
-      border:1px solid rgba(63,91,124,.13);
-      border-radius:7px;
-      background:rgba(255,255,255,.52);
-      padding:10px;
-      cursor:pointer;
-      transition:background .2s ease,border-color .2s ease,transform .2s ease;
-    }
-
-    .module.active{
-      background:rgba(24,151,184,.11);
-      border-color:rgba(24,151,184,.38);
-    }
-
-    .module:hover{transform:translateY(-1px);background:rgba(255,255,255,.75)}
-    .module-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
-    .module h3{margin:0;font-size:14px;color:#17304a}
-    .module p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.45}
-
-    .progress{
-      height:6px;
-      background:rgba(16,32,51,.09);
-      border-radius:99px;
+    .home-hero{grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr)}
+    .studio-map{
+      position:relative;
       overflow:hidden;
-      margin-top:9px;
+      min-height:560px;
+      padding:22px;
+      display:grid;
+      align-content:stretch;
+      background:
+        linear-gradient(145deg,rgba(255,255,255,.74),rgba(239,250,247,.52)),
+        linear-gradient(135deg,rgba(19,152,115,.16),transparent 42%),
+        linear-gradient(315deg,rgba(117,91,215,.13),transparent 45%);
     }
-
-    .progress i{
-      display:block;
-      height:100%;
-      width:var(--value);
-      background:linear-gradient(90deg,#18a77d,#1897b8);
-      border-radius:99px;
-    }
-
-    .control-group{
+    .map-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .map-title h3{margin:0;font-size:20px}
+    .map-title p{margin:7px 0 0;color:var(--muted);line-height:1.55;font-size:13px}
+    .map-grid{
+      margin-top:18px;
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:8px;
-    }
-
-    .mode-btn{
-      min-height:42px;
-      font-size:13px;
-      font-weight:760;
-      background:rgba(255,255,255,.54);
-    }
-
-    .canvas-panel{
-      position:relative;
-      overflow:hidden;
-      min-height:520px;
-      background:
-        linear-gradient(145deg,rgba(255,255,255,.45),rgba(238,248,255,.26)),
-        radial-gradient(ellipse at top,rgba(24,167,125,.18),transparent 58%);
-    }
-
-    .canvas-stage{
-      position:absolute;
-      inset:0;
-    }
-
-    canvas{
-      display:block;
-      width:100%;
-      height:100%;
-    }
-
-    .canvas-overlay{
-      position:absolute;
-      left:16px;
-      right:16px;
-      top:16px;
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      pointer-events:none;
-    }
-
-    .model-label{
-      max-width:360px;
-      border:1px solid rgba(255,255,255,.74);
-      background:rgba(255,255,255,.58);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
-      border-radius:8px;
-      padding:12px;
-      box-shadow:0 14px 30px rgba(42,73,104,.12);
-    }
-
-    .model-label h3{margin:0;font-size:16px}
-    .model-label p{margin:6px 0 0;color:#52647a;font-size:13px;line-height:1.55}
-
-    .status-stack{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      align-items:flex-end;
-    }
-
-    .status-pill{
-      display:inline-flex;
-      align-items:center;
-      gap:7px;
-      min-height:32px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.72);
-      background:rgba(255,255,255,.62);
-      padding:0 10px;
-      font-size:12px;
-      font-weight:800;
-      color:#20374e;
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
-    }
-
-    .status-dot{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:var(--green);
-      box-shadow:0 0 0 4px rgba(24,167,125,.14);
-    }
-
-    .canvas-bottom{
-      position:absolute;
-      left:16px;
-      right:16px;
-      bottom:16px;
-      display:flex;
       gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      pointer-events:none;
     }
-
-    .segment{
-      display:flex;
-      gap:6px;
-      padding:6px;
-      border:1px solid rgba(255,255,255,.75);
-      background:rgba(255,255,255,.58);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
+    .map-card{
+      min-height:120px;
+      border:1px solid rgba(64,91,116,.14);
       border-radius:8px;
-      box-shadow:0 14px 30px rgba(42,73,104,.12);
-      pointer-events:auto;
+      background:rgba(255,255,255,.72);
+      padding:14px;
+      transition:transform .2s ease,box-shadow .2s ease;
     }
-
-    .segment button{
-      height:34px;
-      border:0;
-      border-radius:6px;
-      padding:0 11px;
-      background:transparent;
-      color:#41556c;
-      font-size:13px;
-      font-weight:750;
-      cursor:pointer;
-    }
-
-    .segment button.active{
-      background:#14314a;
+    .map-card:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(31,61,87,.12)}
+    .map-card em{font-style:normal;color:#0f7771;font-size:12px;font-weight:850}
+    .map-card h4{margin:8px 0 6px;font-size:16px}
+    .map-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.55}
+    .map-center{
+      margin-top:10px;
+      border:1px solid rgba(20,127,159,.22);
+      border-radius:8px;
+      background:linear-gradient(135deg,#12314b,#116d68);
       color:white;
-    }
-
-    .telemetry{
-      display:grid;
-      gap:8px;
-    }
-
-    .telemetry-row{
+      padding:18px;
       display:grid;
       grid-template-columns:1fr auto;
+      gap:12px;
       align-items:center;
-      gap:10px;
-      border-bottom:1px solid rgba(63,91,124,.1);
-      padding:8px 0;
     }
-
-    .telemetry-row:last-child{border-bottom:0}
-    .telemetry-row span{color:var(--muted);font-size:12px}
-    .telemetry-row strong{font-size:14px;color:#18324c}
-    .telemetry-row.alert strong{color:var(--red)}
-
-    .fault-card{
-      padding:11px;
-      border:1px solid rgba(216,74,74,.2);
-      border-radius:7px;
-      background:rgba(255,255,255,.56);
-    }
-
-    .fault-card .code{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      color:#a93434;
-      font-weight:850;
-      font-size:13px;
-      margin-bottom:7px;
-    }
-
-    .fault-card p{margin:0;color:#52647a;font-size:12px;line-height:1.55}
-
-    .task-list{
+    .map-center h3{margin:0;font-size:22px}
+    .map-center p{margin:7px 0 0;color:rgba(255,255,255,.76);line-height:1.55}
+    .map-center span{
       display:grid;
-      gap:8px;
+      place-items:center;
+      width:76px;
+      height:76px;
+      border-radius:8px;
+      background:rgba(255,255,255,.12);
+      font-weight:900;
+      font-size:24px;
     }
-
-    .task{
+    .portal-card{
       display:grid;
       grid-template-columns:auto 1fr auto;
-      gap:9px;
+      gap:14px;
       align-items:center;
-      padding:9px;
-      border:1px solid rgba(63,91,124,.12);
-      border-radius:7px;
-      background:rgba(255,255,255,.52);
-    }
-
-    .check{
-      width:21px;
-      height:21px;
-      border-radius:6px;
-      display:grid;
-      place-items:center;
-      background:rgba(24,167,125,.13);
-      color:var(--green);
-    }
-
-    .task h4{margin:0;font-size:12px;color:#20374e}
-    .task p{margin:2px 0 0;font-size:11px;color:var(--muted)}
-    .score{font-size:13px;font-weight:850;color:#13776e}
-
-    .content-section{
-      margin-top:14px;
-      padding:28px;
       border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:rgba(255,255,255,.58);
-      backdrop-filter:blur(18px) saturate(145%);
-      -webkit-backdrop-filter:blur(18px) saturate(145%);
-      box-shadow:var(--panel-shadow);
-    }
-
-    .content-head{
-      display:flex;
-      justify-content:space-between;
-      gap:18px;
-      align-items:end;
-      margin-bottom:18px;
-    }
-
-    .content-head h2{margin:0;font-size:28px;letter-spacing:0}
-    .content-head p{margin:8px 0 0;color:var(--muted);line-height:1.65;max-width:650px}
-
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-
-    .feature,.price,.step{
-      border:1px solid rgba(63,91,124,.13);
       border-radius:8px;
-      background:rgba(255,255,255,.58);
+      background:rgba(255,255,255,.72);
       padding:16px;
-      min-width:0;
+      min-height:124px;
     }
-
-    .feature .icon,.price .icon,.step .icon{
-      width:36px;
-      height:36px;
-      border-radius:8px;
-      display:grid;
-      place-items:center;
-      background:rgba(24,151,184,.11);
-      color:#167d9c;
-      margin-bottom:12px;
+    .portal-card+.portal-card{margin-top:10px}
+    .portal-num{
+      width:42px;height:42px;border-radius:8px;display:grid;place-items:center;
+      font-weight:900;color:white;background:linear-gradient(135deg,var(--green),var(--cyan));
     }
-
-    .feature h3,.price h3,.step h3{margin:0 0 8px;font-size:16px}
-    .feature p,.step p{margin:0;color:var(--muted);font-size:13px;line-height:1.65}
-    .price strong{font-size:26px;color:#12314b}
-    .price span{color:var(--muted);font-size:13px}
-    .price ul{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:7px}
-    .price li{font-size:13px;color:#52647a;display:flex;gap:7px;align-items:flex-start}
-
-    .principle-grid{
-      display:grid;
-      grid-template-columns:1.05fr .95fr;
-      gap:12px;
-      align-items:stretch;
+    .portal-card:nth-child(2) .portal-num{background:linear-gradient(135deg,var(--blue),var(--purple))}
+    .portal-card:nth-child(3) .portal-num{background:linear-gradient(135deg,var(--amber),var(--red))}
+    .portal-card:nth-child(4) .portal-num{background:linear-gradient(135deg,var(--cyan),var(--blue))}
+    .portal-card h3{margin:0;font-size:18px}
+    .portal-card p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+    .portal-card a{font-weight:850;color:#0f7771;white-space:nowrap}
+    .timeline-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .timeline-strip .card{min-height:150px}
+    @media (max-width:980px){
+      .home-hero{grid-template-columns:1fr}
+      .studio-map{min-height:auto}
+      .timeline-strip{grid-template-columns:1fr}
     }
-
-    .principle-card{
-      border:1px solid rgba(63,91,124,.13);
-      border-radius:8px;
-      background:rgba(255,255,255,.58);
-      padding:16px;
-    }
-
-    .principle-card h3{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      margin:0 0 12px;
-      font-size:17px;
-      color:#18324c;
-    }
-
-    .principle-flow{
-      display:grid;
-      gap:9px;
-    }
-
-    .flow-line{
-      display:grid;
-      grid-template-columns:72px 1fr;
-      gap:10px;
-      align-items:start;
-      padding:10px;
-      border:1px solid rgba(63,91,124,.11);
-      border-radius:7px;
-      background:rgba(255,255,255,.5);
-    }
-
-    .flow-line strong{
-      color:#0f766e;
-      font-size:13px;
-      white-space:nowrap;
-    }
-
-    .flow-line span{
-      color:#52647a;
-      font-size:13px;
-      line-height:1.65;
-    }
-
-    .compare-table{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
-      overflow:hidden;
-      border:1px solid rgba(63,91,124,.13);
-      border-radius:8px;
-      background:rgba(255,255,255,.52);
-      font-size:13px;
-    }
-
-    .compare-table th,.compare-table td{
-      padding:10px 11px;
-      border-bottom:1px solid rgba(63,91,124,.1);
-      text-align:left;
-      vertical-align:top;
-      line-height:1.55;
-    }
-
-    .compare-table th{
-      background:rgba(24,151,184,.1);
-      color:#17304a;
-      font-weight:850;
-    }
-
-    .compare-table tr:last-child td{border-bottom:0}
-    .source-note{
-      margin:12px 0 0;
-      color:#738296;
-      font-size:12px;
-      line-height:1.6;
-    }
-
-    .principle-lab{
-      display:grid;
-      grid-template-columns:minmax(0,1.18fr) minmax(280px,.82fr);
-      gap:12px;
-      margin-bottom:12px;
-      align-items:stretch;
-    }
-
-    .principle-model{
-      position:relative;
-      min-height:390px;
-      overflow:hidden;
-      border:1px solid rgba(63,91,124,.13);
-      border-radius:8px;
-      background:
-        linear-gradient(145deg,rgba(255,255,255,.54),rgba(231,248,244,.26)),
-        radial-gradient(ellipse at 78% 16%,rgba(24,151,184,.16),transparent 48%);
-    }
-
-    .cell-stage{
-      position:absolute;
-      inset:0;
-    }
-
-    .principle-model canvas{
-      width:100%;
-      height:100%;
-      display:block;
-    }
-
-    .cell-overlay{
-      position:absolute;
-      left:12px;
-      right:12px;
-      top:12px;
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:10px;
-      pointer-events:none;
-    }
-
-    .cell-tag{
-      display:inline-flex;
-      align-items:center;
-      gap:7px;
-      border:1px solid rgba(255,255,255,.75);
-      border-radius:999px;
-      background:rgba(255,255,255,.66);
-      padding:7px 10px;
-      color:#17304a;
-      font-size:12px;
-      font-weight:850;
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
-      box-shadow:0 10px 24px rgba(42,73,104,.1);
-    }
-
-    .cell-legend{
-      display:grid;
-      gap:6px;
-      border:1px solid rgba(255,255,255,.75);
-      border-radius:8px;
-      background:rgba(255,255,255,.66);
-      padding:9px;
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
-      box-shadow:0 10px 24px rgba(42,73,104,.1);
-    }
-
-    .legend-item{
-      display:flex;
-      align-items:center;
-      gap:7px;
-      color:#52647a;
-      font-size:12px;
-      white-space:nowrap;
-    }
-
-    .legend-dot{
-      width:9px;
-      height:9px;
-      border-radius:50%;
-      background:var(--dot);
-      box-shadow:0 0 0 3px color-mix(in srgb,var(--dot) 18%,transparent);
-      flex:none;
-    }
-
-    .cell-controls{
-      position:absolute;
-      left:12px;
-      right:12px;
-      bottom:12px;
-      display:flex;
-      gap:7px;
-      flex-wrap:wrap;
-      padding:6px;
-      border:1px solid rgba(255,255,255,.75);
-      border-radius:8px;
-      background:rgba(255,255,255,.64);
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
-      box-shadow:0 10px 24px rgba(42,73,104,.1);
-    }
-
-    .cell-btn{
-      min-height:34px;
-      border:0;
-      border-radius:6px;
-      padding:0 10px;
-      background:transparent;
-      color:#41556c;
-      font-size:13px;
-      font-weight:800;
-      cursor:pointer;
-    }
-
-    .cell-btn.active{
-      color:white;
-      background:#12314b;
-    }
-
-    .principle-side{
-      border:1px solid rgba(63,91,124,.13);
-      border-radius:8px;
-      background:rgba(255,255,255,.58);
-      padding:16px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-
-    .principle-side h3{
-      margin:0;
-      font-size:18px;
-      color:#18324c;
-    }
-
-    .principle-side p{
-      margin:0;
-      color:#52647a;
-      line-height:1.68;
-      font-size:13px;
-    }
-
-    .principle-kv{
-      display:grid;
-      gap:8px;
-      margin-top:auto;
-    }
-
-    .principle-kv div{
-      display:grid;
-      grid-template-columns:76px 1fr;
-      gap:9px;
-      align-items:start;
-      padding:9px 0;
-      border-top:1px solid rgba(63,91,124,.1);
-    }
-
-    .principle-kv span{
-      color:#738296;
-      font-size:12px;
-      font-weight:750;
-    }
-
-    .principle-kv strong{
-      color:#17304a;
-      font-size:13px;
-      line-height:1.55;
-    }
-
-    .roadmap{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:8px;
-    }
-
-    .step{position:relative}
-    .step::before{
-      content:"";
-      position:absolute;
-      top:33px;
-      left:52px;
-      right:-18px;
-      height:2px;
-      background:linear-gradient(90deg,rgba(24,167,125,.4),rgba(24,151,184,.12));
-    }
-    .step:last-child::before{display:none}
-
-    .cta-band{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:20px;
-      align-items:center;
-      margin-top:14px;
-      padding:22px;
-      border-radius:8px;
-      color:white;
-      background:linear-gradient(135deg,#12314b,#156f78 58%,#1a8a73);
-      box-shadow:0 18px 42px rgba(18,49,75,.2);
-    }
-
-    .cta-band h2{margin:0;font-size:26px}
-    .cta-band p{margin:7px 0 0;color:rgba(255,255,255,.76);line-height:1.6}
-    .cta-band .primary-btn{
-      background:white;
-      color:#14314a;
-      box-shadow:none;
-      border-color:white;
-      height:42px;
-    }
-
-    .mobile-note{display:none}
-
-    @media (max-width:1180px){
-      .hero{
-        grid-template-columns:260px minmax(0,1fr);
-        grid-template-rows:auto minmax(520px,1fr) auto;
-      }
-      .right-panel{grid-column:1 / -1;display:grid;grid-template-columns:repeat(3,1fr)}
-      .right-panel>.panel-block{min-width:0}
-      .metrics{grid-template-columns:repeat(3,100px)}
-    }
-
-    @media (max-width:860px){
-      .app-shell{width:min(100% - 20px,1480px);padding-top:10px}
-      .topbar{grid-template-columns:1fr auto}
-      .nav{display:none}
-      .hero{grid-template-columns:1fr;grid-template-rows:auto auto minmax(440px,58vh) auto}
-      .intro{grid-template-columns:1fr}
-      .metrics{grid-template-columns:repeat(3,1fr)}
-      .left-panel{order:2}
-      .canvas-panel{order:1;min-height:440px}
-      .right-panel{order:3;grid-template-columns:1fr}
-      .grid-3,.grid-4,.roadmap{grid-template-columns:1fr}
-      .content-section{padding:18px}
-      .content-head{display:block}
-      .principle-lab{grid-template-columns:1fr}
-      .principle-model{min-height:360px}
-      .principle-grid{grid-template-columns:1fr}
-      .canvas-overlay,.canvas-bottom{left:10px;right:10px}
-      .canvas-bottom{align-items:flex-end}
-      .segment{max-width:100%;overflow:auto}
-      .segment button{white-space:nowrap}
-      .cta-band{grid-template-columns:1fr}
-      .step::before{display:none}
-    }
-
     @media (max-width:560px){
-      .top-actions .ghost-btn{display:none}
-      .intro{padding:16px}
-      .intro h2{font-size:30px}
-      .metrics{grid-template-columns:1fr}
-      .model-label{max-width:calc(100vw - 84px)}
-      .model-label p{display:none}
-      .cell-overlay{display:block}
-      .cell-legend{display:none}
-      .cell-controls{overflow:auto;flex-wrap:nowrap}
-      .cell-btn{white-space:nowrap}
-      .status-stack{display:none}
-      .control-group{grid-template-columns:1fr}
-      .mobile-note{display:block;color:var(--muted);font-size:12px;margin-top:8px}
+      .map-grid{grid-template-columns:1fr}
+      .map-center{grid-template-columns:1fr}
+      .portal-card{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <a class="brand" href="#top" aria-label="EV3D Lab 首页">
-        <div class="brand-mark"><i data-lucide="battery-charging"></i></div>
-        <div>
-          <h1>EV3D Lab</h1>
-          <span>新能源汽车职业教育三维实训系统</span>
-        </div>
+  <div class="site-shell">
+    <header class="site-nav">
+      <a class="brand" href="index.html">
+        <div class="brand-mark">智</div>
+        <div><h1>智数维科技</h1><span>AI + 数字孪生汽车产业平台</span></div>
       </a>
-      <nav class="nav" aria-label="页面导航">
-        <a href="#modules"><i data-lucide="layers-3"></i>实训模块</a>
-        <a href="#battery-principle"><i data-lucide="atom"></i>电池原理</a>
-        <a href="#pricing"><i data-lucide="circle-dollar-sign"></i>版本定价</a>
-        <a href="#roadmap"><i data-lucide="route"></i>落地路径</a>
-        <a href="#business"><i data-lucide="briefcase-business"></i>商业价值</a>
+      <nav class="nav-links" aria-label="主导航">
+        <a class="active" href="index.html">首页</a>
+        <a href="platform/auto3d-engine.html">Auto3D Engine</a>
+        <a href="solutions/ev3d-lab.html">EV3D Lab</a>
+        <a href="strategy/framework.html">框架落地</a>
+        <a href="solutions/ev3d-lab/battery-classroom.html">电池课堂</a>
       </nav>
-      <div class="top-actions">
-        <a class="ghost-btn" href="#pricing"><i data-lucide="file-spreadsheet"></i>方案</a>
-        <a class="primary-btn" href="#business"><i data-lucide="send"></i>试点合作</a>
-      </div>
+      <a class="nav-action" href="EV3D_Lab_Web.html">产品演示</a>
     </header>
 
-    <main id="top">
-      <section class="hero" aria-label="新能源汽车三维实训演示台">
-        <div class="intro">
-          <div>
-            <div class="eyebrow"><i data-lucide="graduation-cap"></i> 新能源三电系统 · 虚拟仿真实训 · 教学考核闭环</div>
-            <h2>把看不见、拆不起、有风险的新能源实训变成可交互课堂。</h2>
-            <p>面向中职、高职、技师学院，把锂离子电池“正负极嵌入/脱嵌、离子迁移、电子外电路流动、BMS监测、热失控风险”做成可观察、可拆解、可考核的课堂实训。</p>
-          </div>
-          <div class="metrics" aria-label="核心商业指标">
-            <div class="metric"><strong>8-80万</strong><span>单校产品与实训室客单价</span></div>
-            <div class="metric"><strong>20+</strong><span>首版典型故障诊断任务</span></div>
-            <div class="metric"><strong>10%-20%</strong><span>年度服务与内容更新费</span></div>
+    <main>
+      <section class="hero home-hero">
+        <div class="hero-card">
+          <span class="eyebrow">公司官网 · 统一入口</span>
+          <h2 class="hero-title">智数维科技，把汽车技术变成可视化、可训练、可复制的数字实训能力。</h2>
+          <p class="lead">我们以 Auto3D Engine 为平台底座，以 EV3D Lab 为首个商业化产品，先从新能源汽车职业教育切入，再扩展到企业培训、车企数字资产、认证和产业数据服务。</p>
+          <div class="actions">
+            <a class="btn primary" href="solutions/ev3d-lab.html">进入 EV3D Lab</a>
+            <a class="btn secondary" href="platform/auto3d-engine.html">查看平台能力</a>
+            <a class="btn secondary" href="strategy/framework.html">看落地框架</a>
           </div>
         </div>
-
-        <aside class="panel left-panel" aria-label="实训控制台">
-          <div class="panel-block">
-            <h2 class="section-title"><span><i data-lucide="book-open-check"></i>课程模块</span><em class="chip">V1.0</em></h2>
-            <div class="module-list">
-              <button class="module active" data-focus="battery" title="聚焦动力电池包">
-                <div class="module-head"><h3>动力电池包</h3><i data-lucide="battery-full"></i></div>
-                <p>正极、负极、隔膜、电解液、电芯模组与热管理结构。</p>
-                <div class="progress" style="--value:92%"><i></i></div>
-              </button>
-              <button class="module" data-focus="motor" title="聚焦电机电控">
-                <div class="module-head"><h3>电机电控</h3><i data-lucide="rotate-3d"></i></div>
-                <p>驱动电机、逆变器、控制器与信号流。</p>
-                <div class="progress" style="--value:76%"><i></i></div>
-              </button>
-              <button class="module" data-focus="hv" title="聚焦高压安全">
-                <div class="module-head"><h3>高压安全</h3><i data-lucide="shield-alert"></i></div>
-                <p>高压配电、互锁、绝缘检测与上电流程。</p>
-                <div class="progress" style="--value:84%"><i></i></div>
-              </button>
+        <aside class="panel studio-map">
+          <div class="map-top">
+            <div class="map-title">
+              <h3>公司产品架构</h3>
+              <p>一个平台底座，多个可商业化场景。</p>
             </div>
+            <span class="badge">ZSV Tech</span>
           </div>
-
-          <div class="panel-block">
-            <h2 class="section-title"><span><i data-lucide="sliders-horizontal"></i>实训模式</span></h2>
-            <div class="control-group">
-              <button class="mode-btn active" data-mode="assemble" title="显示完整装配结构"><i data-lucide="box"></i>装配</button>
-              <button class="mode-btn" data-mode="explode" title="显示分层拆解结构"><i data-lucide="unfold-horizontal"></i>拆解</button>
-              <button class="mode-btn" data-mode="flow" title="显示锂离子与电子流动路径"><i data-lucide="cable"></i>充放电</button>
-              <button class="mode-btn" data-mode="fault" title="显示故障定位"><i data-lucide="scan-search"></i>故障</button>
+          <div class="map-center">
+            <div>
+              <h3>Auto3D Engine</h3>
+              <p>三维交互、AI诊断、汽车知识图谱、数字模型库。</p>
             </div>
-            <p class="mobile-note">模型支持触控旋转、缩放与按钮切换。</p>
+            <span>3D</span>
           </div>
-
-          <div class="panel-block">
-            <h2 class="section-title"><span><i data-lucide="clipboard-check"></i>课堂任务</span></h2>
-            <div class="task-list">
-              <div class="task"><span class="check"><i data-lucide="check"></i></span><div><h4>标注正极/负极/隔膜</h4><p>电芯结构</p></div><span class="score">98</span></div>
-              <div class="task"><span class="check"><i data-lucide="check"></i></span><div><h4>说明充电离子迁移方向</h4><p>工作原理</p></div><span class="score">92</span></div>
-              <div class="task"><span class="check"><i data-lucide="check"></i></span><div><h4>判断LFP与三元锂差异</h4><p>材料特性</p></div><span class="score">86</span></div>
-            </div>
-          </div>
-        </aside>
-
-        <section class="panel canvas-panel" aria-label="三维交互模型">
-          <div id="modelStage" class="canvas-stage"></div>
-          <div class="canvas-overlay">
-            <div class="model-label">
-              <h3 id="modelTitle">锂离子电池包原理实训模型</h3>
-              <p id="modelText">从电芯正负极、隔膜、电解液到模组、BMS与高压连接器，逐层讲解“锂离子走电解液，电子走外电路”的基本原理。</p>
-            </div>
-            <div class="status-stack">
-              <span class="status-pill"><i class="status-dot"></i> Web3D 运行中</span>
-              <span class="status-pill"><i data-lucide="mouse-pointer-2"></i> Orbit Controls</span>
-            </div>
-          </div>
-          <div class="canvas-bottom">
-            <div class="segment" role="tablist" aria-label="模型视角">
-              <button class="view-btn active" data-view="iso" title="等轴视角">等轴</button>
-              <button class="view-btn" data-view="top" title="俯视电池包">俯视</button>
-              <button class="view-btn" data-view="front" title="正视电机电控">正视</button>
-            </div>
-            <div class="segment">
-              <button id="resetBtn" title="复位三维模型"><i data-lucide="rotate-ccw"></i></button>
-            </div>
-          </div>
-        </section>
-
-        <aside class="panel right-panel" aria-label="教学数据与故障信息">
-          <div class="panel-block">
-            <h2 class="section-title"><span><i data-lucide="activity"></i>实时数据</span><em class="chip">仿真</em></h2>
-            <div class="telemetry">
-              <div class="telemetry-row"><span>电池体系</span><strong id="voltage">LFP / 三元锂</strong></div>
-              <div class="telemetry-row"><span>正极材料</span><strong id="soc">LiFePO4 / NCM</strong></div>
-              <div class="telemetry-row"><span>离子迁移</span><strong id="resistance">充电: 正→负</strong></div>
-              <div class="telemetry-row alert"><span>外部电子</span><strong id="faultCode">放电: 负→正</strong></div>
-            </div>
-          </div>
-
-          <div class="panel-block">
-            <h2 class="section-title"><span><i data-lucide="triangle-alert"></i>故障案例</span></h2>
-            <div class="fault-card">
-              <div class="code"><i data-lucide="scan-line"></i>热失控风险 · 过充/短路/高温</div>
-              <p>三元锂能量密度高但热稳定性更敏感；磷酸铁锂安全性、循环寿命和成本更有优势。系统用故障标记训练学生识别风险部位。</p>
-            </div>
-          </div>
-
-          <div class="panel-block">
-            <h2 class="section-title"><span><i data-lucide="chart-no-axes-combined"></i>班级学情</span></h2>
-            <div class="telemetry">
-              <div class="telemetry-row"><span>平均成绩</span><strong>91.2</strong></div>
-              <div class="telemetry-row"><span>误操作次数</span><strong>14</strong></div>
-              <div class="telemetry-row"><span>高风险步骤通过率</span><strong>87%</strong></div>
-              <div class="telemetry-row"><span>建议复训内容</span><strong>高压互锁</strong></div>
-            </div>
+          <div class="map-grid">
+            <a class="map-card" href="solutions/ev3d-lab.html"><em>首发产品</em><h4>EV3D Lab</h4><p>新能源汽车职业教育三维实训系统。</p></a>
+            <a class="map-card" href="solutions/ev3d-lab/battery-classroom.html"><em>三级页面</em><h4>电池原理课堂</h4><p>充放电、LFP/三元锂、热风险诊断。</p></a>
+            <a class="map-card" href="strategy/framework.html"><em>创业路径</em><h4>框架落地页</h4><p>从大平台到小场景的执行路线。</p></a>
+            <a class="map-card" href="Auto3D_Engine.html"><em>原始资料</em><h4>路演幻灯片</h4><p>Auto3D Engine 历史路演版本。</p></a>
           </div>
         </aside>
       </section>
 
-      <section id="battery-principle" class="content-section">
-        <div class="content-head">
+      <section class="section">
+        <div class="section-head">
           <div>
-            <div class="eyebrow"><i data-lucide="atom"></i> 电池原理课堂</div>
-            <h2>把锂离子电池讲成学生能看见的“离子流 + 电子流”。</h2>
-            <p>根据《汽车电池技术——新能源汽车电池分类及特性》的电池分类与特性内容，EV3D Lab 将动力电池原理拆成结构认知、充放电路径、材料对比和安全诊断四类实训。</p>
+            <h2>四个入口，覆盖公司官网的二级与三级页面</h2>
+            <p>每个页面都有统一品牌导航，可以互相跳转；布局和表达重点不同，避免页面同质化。</p>
           </div>
         </div>
-        <div class="principle-lab" aria-label="电芯原理三维交互演示">
-          <div class="principle-model">
-            <div id="cellStage" class="cell-stage"></div>
-            <div class="cell-overlay">
-              <span class="cell-tag"><i data-lucide="mouse-pointer-2"></i> 可旋转电芯剖面</span>
-              <div class="cell-legend" aria-label="三维元素图例">
-                <div class="legend-item"><i class="legend-dot" style="--dot:#19a77d"></i>锂离子 Li+</div>
-                <div class="legend-item"><i class="legend-dot" style="--dot:#f19a2a"></i>外部电子 e-</div>
-                <div class="legend-item"><i class="legend-dot" style="--dot:#ffffff"></i>隔膜</div>
-              </div>
-            </div>
-            <div class="cell-controls" aria-label="电芯原理交互模式">
-              <button class="cell-btn active" data-cell-mode="charge">充电</button>
-              <button class="cell-btn" data-cell-mode="discharge">放电</button>
-              <button class="cell-btn" data-cell-mode="lfp">LFP</button>
-              <button class="cell-btn" data-cell-mode="ncm">三元锂</button>
-              <button class="cell-btn" data-cell-mode="risk">热风险</button>
-            </div>
-          </div>
-          <aside class="principle-side">
-            <h3 id="cellInfoTitle">充电过程：锂离子从正极嵌入负极</h3>
-            <p id="cellInfoText">充电时，锂离子从正极材料脱出，经电解液穿过隔膜嵌入负极石墨；电子经外部电路到达负极，电能被转化为化学能储存。</p>
-            <div class="principle-kv">
-              <div><span>离子方向</span><strong id="ionDirection">正极 → 负极</strong></div>
-              <div><span>电子方向</span><strong id="electronDirection">外部电路 → 负极</strong></div>
-              <div><span>教学提问</span><strong id="classQuestion">为什么电子不能直接穿过电解液和隔膜？</strong></div>
-            </div>
-          </aside>
-        </div>
-        <div class="principle-grid">
-          <article class="principle-card">
-            <h3><i data-lucide="repeat"></i>锂离子电池充放电路径</h3>
-            <div class="principle-flow">
-              <div class="flow-line"><strong>核心原理</strong><span>锂离子在正极和负极之间往返迁移，电子不穿过电解液，而是通过外部电路流动，形成可用电流。</span></div>
-              <div class="flow-line"><strong>充电时</strong><span>锂离子从正极材料脱出，经电解液穿过隔膜嵌入负极石墨；电子经外部电路到达负极，完成能量存储。</span></div>
-              <div class="flow-line"><strong>放电时</strong><span>锂离子从负极脱出回到正极；电子从负极经外部负载流向正极，为电机控制器、车载电器等提供能量。</span></div>
-              <div class="flow-line"><strong>实训重点</strong><span>学生需要能在三维模型中指出正极、负极、隔膜、电解液、BMS采样线束和高压连接器，并解释离子/电子路径不同。</span></div>
-            </div>
-          </article>
-          <article class="principle-card">
-            <h3><i data-lucide="table-2"></i>LFP 与三元锂教学对比</h3>
-            <table class="compare-table" aria-label="磷酸铁锂与三元锂电池对比">
-              <thead>
-                <tr><th>项目</th><th>磷酸铁锂 LFP</th><th>三元锂 NCM/NCA</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>正极材料</td><td>磷酸铁锂 LiFePO4</td><td>镍钴锰或镍钴铝三元材料</td></tr>
-                <tr><td>课堂关键词</td><td>安全、长寿命、低成本</td><td>高能量密度、续航、低温表现</td></tr>
-                <tr><td>安全特性</td><td>热稳定性较好，过充和高温下风险相对低</td><td>液态电解质与高镍材料对热失控更敏感</td></tr>
-                <tr><td>实训任务</td><td>循环寿命评估、低温容量衰减、BMS均衡</td><td>能量密度分析、热管理、过充风险识别</td></tr>
-              </tbody>
-            </table>
-            <p class="source-note">延伸讲解：钠离子电池工作机理与锂离子相似，但能量密度仍受限制；固态电池通过固态电解质改善安全边界，是后续课程可扩展方向。</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="modules" class="content-section">
-        <div class="content-head">
-          <div>
-            <div class="eyebrow"><i data-lucide="layers-3"></i> 实训模块</div>
-            <h2>首版只打穿三电系统核心教学。</h2>
-            <p>产品聚焦职业院校最难教、最需要实训安全边界的内容，先形成可采购、可交付、可复制的标准包。</p>
-          </div>
-        </div>
-        <div class="grid-3">
-          <article class="feature"><div class="icon"><i data-lucide="battery-charging"></i></div><h3>动力电池与BMS</h3><p>正极、负极、隔膜、电解液、电芯模组、BMS采样、电池均衡与热管理。</p></article>
-          <article class="feature"><div class="icon"><i data-lucide="cog"></i></div><h3>电机与电控</h3><p>驱动电机、逆变器、电控信号、能量流与常见控制故障。</p></article>
-          <article class="feature"><div class="icon"><i data-lucide="shield-check"></i></div><h3>高压安全</h3><p>维修断电、绝缘检测、高压互锁、上电流程和风险步骤考核。</p></article>
-        </div>
-      </section>
-
-      <section id="pricing" class="content-section">
-        <div class="content-head">
-          <div>
-            <div class="eyebrow"><i data-lucide="circle-dollar-sign"></i> 产品版本</div>
-            <h2>从软件授权到虚拟仿真实训室。</h2>
-            <p>按学校预算、专业建设阶段和实训室目标分层交付，便于从小额试点升级到完整项目。</p>
-          </div>
-        </div>
-        <div class="grid-3">
-          <article class="price"><div class="icon"><i data-lucide="monitor"></i></div><h3>基础版</h3><strong>8-15万</strong><span> / 校</span><ul><li><i data-lucide="check"></i>三维认知模型</li><li><i data-lucide="check"></i>基础原理动画</li><li><i data-lucide="check"></i>课件资源包</li></ul></article>
-          <article class="price"><div class="icon"><i data-lucide="boxes"></i></div><h3>标准版</h3><strong>20-40万</strong><span> / 校</span><ul><li><i data-lucide="check"></i>虚拟拆装训练</li><li><i data-lucide="check"></i>故障诊断案例</li><li><i data-lucide="check"></i>教师端与考核系统</li></ul></article>
-          <article class="price"><div class="icon"><i data-lucide="school"></i></div><h3>旗舰实训室</h3><strong>50-80万</strong><span> / 校</span><ul><li><i data-lucide="check"></i>软件与硬件集成</li><li><i data-lucide="check"></i>教师培训与实施</li><li><i data-lucide="check"></i>年度示范校成果包</li></ul></article>
-        </div>
-      </section>
-
-      <section id="roadmap" class="content-section">
-        <div class="content-head">
-          <div>
-            <div class="eyebrow"><i data-lucide="route"></i> 落地路径</div>
-            <h2>先样板校，再区域复制。</h2>
-            <p>把商业计划书里的创业路径收敛成 24 个月可执行路线，以学校试用、付费订单和标杆案例作为关键指标。</p>
-          </div>
-        </div>
-        <div class="roadmap">
-          <article class="step"><div class="icon"><i data-lucide="search-check"></i></div><h3>0-2个月</h3><p>访谈专业老师，确定高压安全、动力电池、驱动电机三门刚需课程。</p></article>
-          <article class="step"><div class="icon"><i data-lucide="drafting-compass"></i></div><h3>3-6个月</h3><p>完成 MVP、核心模型、20 个实训任务并进入 3 所样板校。</p></article>
-          <article class="step"><div class="icon"><i data-lucide="handshake"></i></div><h3>6-12个月</h3><p>签约 20 所学校，形成标准报价、交付手册和标杆案例。</p></article>
-          <article class="step"><div class="icon"><i data-lucide="network"></i></div><h3>12-24个月</h3><p>拓展 80-100 所学校，建立渠道，形成续费与课程包收入。</p></article>
-        </div>
-      </section>
-
-      <section id="business" class="content-section">
-        <div class="content-head">
-          <div>
-            <div class="eyebrow"><i data-lucide="briefcase-business"></i> 商业价值</div>
-            <h2>一个更适合早期创业的高客单价场景。</h2>
-            <p>EV3D Lab 不从泛平台切入，而是用新能源汽车职业教育三维实训系统跑通需求、交付、案例和现金流。</p>
-          </div>
-        </div>
-        <div class="grid-4">
-          <article class="feature"><div class="icon"><i data-lucide="target"></i></div><h3>垂直</h3><p>只聚焦新能源汽车三电系统，客户认知清晰，销售表达直接。</p></article>
-          <article class="feature"><div class="icon"><i data-lucide="flame-kindling"></i></div><h3>刚需</h3><p>高压安全、BMS、电机电控本身就需要虚拟演示和反复训练。</p></article>
-          <article class="feature"><div class="icon"><i data-lucide="landmark"></i></div><h3>高客单</h3><p>进入专业建设、实训室、技能竞赛和示范校预算池。</p></article>
-          <article class="feature"><div class="icon"><i data-lucide="repeat-2"></i></div><h3>可复制</h3><p>样板校跑通后可通过省级渠道、职教联盟和装备商复制。</p></article>
-        </div>
-      </section>
-
-      <section class="cta-band">
         <div>
-          <h2>EV3D Lab · 新能源汽车三维实训样板间</h2>
-          <p>适合用于投资路演、院校拜访、渠道招商和内部产品评审。</p>
+          <div class="portal-card">
+            <div class="portal-num">01</div>
+            <div><h3>Auto3D Engine 平台页</h3><p>讲清公司的大平台、产品矩阵、市场空间、技术壁垒和增长引擎。</p></div>
+            <a href="platform/auto3d-engine.html">进入</a>
+          </div>
+          <div class="portal-card">
+            <div class="portal-num">02</div>
+            <div><h3>EV3D Lab 产品页</h3><p>展示新能源汽车职业教育三维实训系统，链接到原三维演示页和电池课堂。</p></div>
+            <a href="solutions/ev3d-lab.html">进入</a>
+          </div>
+          <div class="portal-card">
+            <div class="portal-num">03</div>
+            <div><h3>框架落地页</h3><p>用“框架首页 + 落地详情页”的方式讲清从大到小的创业逻辑。</p></div>
+            <a href="strategy/framework.html">进入</a>
+          </div>
+          <div class="portal-card">
+            <div class="portal-num">04</div>
+            <div><h3>电池原理课堂</h3><p>三级页面，聚焦具体可交付课程，展示电池结构、充放电和热风险诊断。</p></div>
+            <a href="solutions/ev3d-lab/battery-classroom.html">进入</a>
+          </div>
         </div>
-        <a class="primary-btn" href="#top"><i data-lucide="box-select"></i>查看三维演示</a>
       </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>从公司愿景到第一批订单</h2>
+            <p>官网也服务创业执行：看得见平台方向，也看得见第一个可落地客户场景。</p>
+          </div>
+        </div>
+        <div class="timeline-strip">
+          <div class="card"><span class="badge">0-2个月</span><h3>需求验证</h3><p>访谈新能源汽车专业老师，确定三电系统高频教学痛点。</p></div>
+          <div class="card"><span class="badge">3-6个月</span><h3>MVP交付</h3><p>完成电池包、电芯原理、故障诊断和教师考核演示。</p></div>
+          <div class="card"><span class="badge">6-12个月</span><h3>样板校验证</h3><p>共建3所示范校，形成课堂数据、案例材料和采购线索。</p></div>
+          <div class="card"><span class="badge">12-24个月</span><h3>区域复制</h3><p>通过渠道、职教联盟和装备展拓展80-100所学校。</p></div>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <div>
+          <h2>智数维科技 · AI + 数字孪生汽车教育基础设施</h2>
+          <p>统一官网已整合 Auto3D Engine、EV3D Lab、框架落地页和电池原理课堂。</p>
+        </div>
+        <a href="solutions/ev3d-lab.html">查看首发产品</a>
+      </footer>
     </main>
   </div>
-
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-      }
-    }
-  </script>
-  <script type="module">
-    import * as THREE from "three";
-    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-
-    lucide.createIcons();
-
-    const stage = document.getElementById("modelStage");
-    const scene = new THREE.Scene();
-    scene.background = null;
-
-    const camera = new THREE.PerspectiveCamera(42, stage.clientWidth / stage.clientHeight, 0.1, 120);
-    camera.position.set(8.2, 5.6, 8.8);
-
-    const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(stage.clientWidth, stage.clientHeight);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    stage.appendChild(renderer.domElement);
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.065;
-    controls.target.set(0, 0.55, 0);
-    controls.minDistance = 5;
-    controls.maxDistance = 18;
-
-    const hemi = new THREE.HemisphereLight(0xffffff, 0xbfd3e2, 2.5);
-    scene.add(hemi);
-    const key = new THREE.DirectionalLight(0xffffff, 2.8);
-    key.position.set(6, 8, 6);
-    key.castShadow = true;
-    key.shadow.mapSize.set(1024, 1024);
-    scene.add(key);
-    const rim = new THREE.DirectionalLight(0x94f5d3, 1.6);
-    rim.position.set(-6, 4, -3);
-    scene.add(rim);
-
-    const root = new THREE.Group();
-    scene.add(root);
-
-    const mat = {
-      shell: new THREE.MeshPhysicalMaterial({ color:0xe9f3f5, metalness:.15, roughness:.38, clearcoat:.25, transparent:true, opacity:.86 }),
-      dark: new THREE.MeshStandardMaterial({ color:0x24364a, metalness:.25, roughness:.42 }),
-      cell: new THREE.MeshStandardMaterial({ color:0x16a57e, metalness:.2, roughness:.36 }),
-      cellAlt: new THREE.MeshStandardMaterial({ color:0x2096c0, metalness:.18, roughness:.36 }),
-      copper: new THREE.MeshStandardMaterial({ color:0xd98923, metalness:.5, roughness:.28, emissive:0x211000, emissiveIntensity:.1 }),
-      red: new THREE.MeshStandardMaterial({ color:0xda4b4b, metalness:.18, roughness:.4, emissive:0x4d0707, emissiveIntensity:.35 }),
-      blue: new THREE.MeshStandardMaterial({ color:0x286ec5, metalness:.22, roughness:.36 }),
-      glass: new THREE.MeshPhysicalMaterial({ color:0xa7d8f0, metalness:0, roughness:.08, transmission:.25, transparent:true, opacity:.35, clearcoat:.8 }),
-      cable: new THREE.MeshStandardMaterial({ color:0xf39f25, metalness:.28, roughness:.32, emissive:0x3a1c00, emissiveIntensity:.18 }),
-      glow: new THREE.MeshBasicMaterial({ color:0xffb13d, transparent:true, opacity:.72 }),
-      fault: new THREE.MeshBasicMaterial({ color:0xff4b4b, transparent:true, opacity:.76 }),
-      floor: new THREE.ShadowMaterial({ color:0x29445c, opacity:.14 })
-    };
-
-    function roundedBox(w,h,d,r=0.08,s=3){
-      const shape = new THREE.Shape();
-      const x = -w/2, y = -h/2;
-      shape.moveTo(x+r,y);
-      shape.lineTo(x+w-r,y);
-      shape.quadraticCurveTo(x+w,y,x+w,y+r);
-      shape.lineTo(x+w,y+h-r);
-      shape.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-      shape.lineTo(x+r,y+h);
-      shape.quadraticCurveTo(x,y+h,x,y+h-r);
-      shape.lineTo(x,y+r);
-      shape.quadraticCurveTo(x,y,x+r,y);
-      const geo = new THREE.ExtrudeGeometry(shape,{depth:d,bevelEnabled:true,bevelSize:r/2,bevelSegments:s});
-      geo.center();
-      return geo;
-    }
-
-    function box(name, w, h, d, material, x, y, z){
-      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), material);
-      mesh.name = name;
-      mesh.position.set(x,y,z);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      root.add(mesh);
-      return mesh;
-    }
-
-    const parts = {};
-    parts.base = new THREE.Mesh(roundedBox(5.6,.34,3.25,.16), mat.shell);
-    parts.base.name = "电池包上盖";
-    parts.base.position.set(-1.15, .62, .1);
-    parts.base.castShadow = true;
-    parts.base.receiveShadow = true;
-    root.add(parts.base);
-
-    parts.tray = new THREE.Mesh(roundedBox(5.86,.28,3.48,.12), mat.dark);
-    parts.tray.name = "电池包托盘";
-    parts.tray.position.set(-1.15, .18, .1);
-    parts.tray.castShadow = true;
-    parts.tray.receiveShadow = true;
-    root.add(parts.tray);
-
-    const cells = new THREE.Group();
-    cells.name = "电芯模组阵列";
-    for(let row=0;row<3;row++){
-      for(let col=0;col<6;col++){
-        const g = roundedBox(.62,.56,.72,.06,2);
-        const m = new THREE.Mesh(g, (row+col)%2 ? mat.cell : mat.cellAlt);
-        m.position.set(-3.05 + col*.76, .82, -1.04 + row*.86);
-        m.castShadow = true;
-        m.receiveShadow = true;
-        cells.add(m);
-      }
-    }
-    root.add(cells);
-    parts.cells = cells;
-
-    parts.bms = box("BMS控制单元", .95, .42, 1.05, mat.blue, 1.72, 1.05, -1.34);
-    parts.connector = box("高压连接器", .52, .48, .48, mat.copper, 1.92, 1.06, 1.34);
-    parts.junction = box("高压配电盒", .92, .5, .72, mat.dark, .95, 1.08, 1.12);
-
-    const motor = new THREE.Group();
-    motor.name = "驱动电机";
-    const motorBody = new THREE.Mesh(new THREE.CylinderGeometry(.68,.68,1.55,48), mat.dark);
-    motorBody.rotation.z = Math.PI/2;
-    motorBody.castShadow = true;
-    motor.add(motorBody);
-    const rotor = new THREE.Mesh(new THREE.CylinderGeometry(.33,.33,1.75,40), mat.copper);
-    rotor.rotation.z = Math.PI/2;
-    rotor.castShadow = true;
-    motor.add(rotor);
-    const cap1 = new THREE.Mesh(new THREE.CylinderGeometry(.72,.72,.08,48), mat.blue);
-    cap1.rotation.z = Math.PI/2; cap1.position.x=-.84; cap1.castShadow=true; motor.add(cap1);
-    const cap2 = cap1.clone(); cap2.position.x=.84; motor.add(cap2);
-    motor.position.set(3.05,.78,.72);
-    root.add(motor);
-    parts.motor = motor;
-
-    parts.inverter = box("电机控制器", 1.1, .62, 1.05, mat.glass, 3.05, 1.38, -.88);
-
-    function makeCable(name, points, material, radius=.045){
-      const curve = new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));
-      const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, 60, radius, 12, false), material);
-      mesh.name = name;
-      mesh.castShadow = true;
-      root.add(mesh);
-      return mesh;
-    }
-
-    parts.hvCable = makeCable("高压橙色线束", [[1.92,1.15,1.34],[2.45,1.38,1.2],[3.03,1.52,.55],[3.04,1.43,-.42]], mat.cable, .055);
-    parts.signalCable = makeCable("BMS采样线束", [[1.72,1.22,-1.34],[.75,1.34,-1.2],[-.65,1.42,-1.25],[-2.7,1.25,-.95]], mat.blue, .028);
-
-    const flowGroup = new THREE.Group();
-    root.add(flowGroup);
-    const flowDots = [];
-    for(let i=0;i<9;i++){
-      const s = new THREE.Mesh(new THREE.SphereGeometry(.075,18,18), mat.glow);
-      s.visible = false;
-      flowGroup.add(s);
-      flowDots.push(s);
-    }
-
-    const faultGroup = new THREE.Group();
-    root.add(faultGroup);
-    const faultRing = new THREE.Mesh(new THREE.TorusGeometry(.56,.025,12,70), mat.fault);
-    faultRing.position.set(1.72,1.08,-1.34);
-    faultRing.rotation.x = Math.PI/2;
-    faultRing.visible = false;
-    faultGroup.add(faultRing);
-    const faultHalo = new THREE.Mesh(new THREE.SphereGeometry(.16,24,24), mat.red);
-    faultHalo.position.set(1.72,1.08,-1.34);
-    faultHalo.visible = false;
-    faultGroup.add(faultHalo);
-
-    const grid = new THREE.GridHelper(12, 16, 0x6c8da6, 0xb9cad5);
-    grid.position.y = -0.02;
-    grid.material.transparent = true;
-    grid.material.opacity = .2;
-    scene.add(grid);
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(16, 12), mat.floor);
-    floor.rotation.x = -Math.PI/2;
-    floor.position.y = -.035;
-    floor.receiveShadow = true;
-    scene.add(floor);
-
-    const initialTransforms = new Map();
-    root.traverse(obj => {
-      initialTransforms.set(obj.uuid, {
-        position: obj.position.clone(),
-        rotation: obj.rotation.clone(),
-        scale: obj.scale.clone()
-      });
-    });
-
-    const label = {
-      title: document.getElementById("modelTitle"),
-      text: document.getElementById("modelText"),
-      voltage: document.getElementById("voltage"),
-      soc: document.getElementById("soc"),
-      resistance: document.getElementById("resistance"),
-      faultCode: document.getElementById("faultCode")
-    };
-
-    let activeMode = "assemble";
-    let focusTarget = "battery";
-    let targetCamera = null;
-
-    const modes = {
-      assemble: {
-        title:"锂离子电池包原理实训模型",
-        text:"从电芯正负极、隔膜、电解液到模组、BMS与高压连接器，逐层讲解“锂离子走电解液，电子走外电路”的基本原理。",
-        voltage:"LFP / 三元锂", soc:"LiFePO4 / NCM", resistance:"离子: 正负极往返", fault:"电子: 外电路流动"
-      },
-      explode: {
-        title:"电芯结构分层拆解训练",
-        text:"上盖、托盘、电芯模组、BMS、连接器与高压配电盒分层展开，教师可讲解正极、负极、隔膜和电解液在电芯中的位置关系。",
-        voltage:"结构拆解", soc:"正极/负极/隔膜", resistance:"BMS采样线束", fault:"高压连接器"
-      },
-      flow: {
-        title:"充放电路径可视化",
-        text:"充电时锂离子从正极脱出并嵌入负极石墨；放电时锂离子回到正极，电子经外部负载流动并输出电能。",
-        voltage:"充电: Li+ 正→负", soc:"放电: Li+ 负→正", resistance:"电子: 外部电路", fault:"能量: 化学能⇄电能"
-      },
-      fault: {
-        title:"热失控与BMS异常诊断",
-        text:"故障标记聚焦BMS控制单元与采样线束，引导学生分析过充、短路、高温和热失控风险，并比较LFP与三元锂安全特性。",
-        voltage:"风险: 过充/短路", soc:"LFP: 热稳定较好", resistance:"三元: 能量密度高", fault:"P0A1F"
-      }
-    };
-
-    function applyMode(mode){
-      activeMode = mode;
-      document.querySelectorAll(".mode-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
-      const cfg = modes[mode];
-      label.title.textContent = cfg.title;
-      label.text.textContent = cfg.text;
-      label.voltage.textContent = cfg.voltage;
-      label.soc.textContent = cfg.soc;
-      label.resistance.textContent = cfg.resistance;
-      label.faultCode.textContent = cfg.fault;
-      flowDots.forEach(dot => dot.visible = mode === "flow");
-      faultRing.visible = mode === "fault";
-      faultHalo.visible = mode === "fault";
-    }
-
-    function resetTransforms(){
-      root.traverse(obj => {
-        const t = initialTransforms.get(obj.uuid);
-        if(!t) return;
-        obj.position.copy(t.position);
-        obj.rotation.copy(t.rotation);
-        obj.scale.copy(t.scale);
-      });
-    }
-
-    function applyFocus(target){
-      focusTarget = target;
-      document.querySelectorAll(".module").forEach(btn => btn.classList.toggle("active", btn.dataset.focus === target));
-      if(target === "battery") targetCamera = {pos:new THREE.Vector3(7.4,5.2,8.2), tar:new THREE.Vector3(-.9,.7,.05)};
-      if(target === "motor") targetCamera = {pos:new THREE.Vector3(6.1,3.8,4.5), tar:new THREE.Vector3(2.8,.95,-.05)};
-      if(target === "hv"){
-        targetCamera = {pos:new THREE.Vector3(6.6,4.8,6.6), tar:new THREE.Vector3(1.4,1.1,.7)};
-        applyMode("flow");
-      }
-    }
-
-    function setView(view){
-      document.querySelectorAll(".view-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.view === view));
-      if(view === "iso") targetCamera = {pos:new THREE.Vector3(8.2,5.6,8.8), tar:new THREE.Vector3(0,.55,0)};
-      if(view === "top") targetCamera = {pos:new THREE.Vector3(0,10.5,.01), tar:new THREE.Vector3(-.5,.4,0)};
-      if(view === "front") targetCamera = {pos:new THREE.Vector3(0,2.9,10.5), tar:new THREE.Vector3(.8,.65,0)};
-    }
-
-    document.querySelectorAll(".mode-btn").forEach(btn => btn.addEventListener("click", () => applyMode(btn.dataset.mode)));
-    document.querySelectorAll(".module").forEach(btn => btn.addEventListener("click", () => applyFocus(btn.dataset.focus)));
-    document.querySelectorAll(".view-btn").forEach(btn => btn.addEventListener("click", () => setView(btn.dataset.view)));
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      applyMode("assemble");
-      applyFocus("battery");
-      setView("iso");
-    });
-
-    function animateParts(time){
-      if(activeMode === "assemble" || activeMode === "flow" || activeMode === "fault"){
-        resetTransforms();
-        parts.motor.rotation.y = Math.sin(time*.0008) * .04;
-        parts.inverter.position.y += Math.sin(time*.0012) * .025;
-      }
-      if(activeMode === "explode"){
-        resetTransforms();
-        parts.base.position.y += 1.15;
-        parts.cells.position.y += .42;
-        parts.bms.position.set(2.55,1.48,-2.18);
-        parts.connector.position.set(2.65,1.35,2.08);
-        parts.junction.position.set(1.15,1.54,2.05);
-        parts.hvCable.scale.set(1.05,1.05,1.05);
-        parts.signalCable.scale.set(1.02,1.02,1.02);
-        parts.motor.position.x = 3.85;
-        parts.inverter.position.x = 3.85;
-      }
-      if(activeMode === "flow"){
-        const curve = new THREE.CatmullRomCurve3([
-          new THREE.Vector3(1.92,1.15,1.34),
-          new THREE.Vector3(2.45,1.38,1.2),
-          new THREE.Vector3(3.03,1.52,.55),
-          new THREE.Vector3(3.04,1.43,-.42),
-          new THREE.Vector3(3.05,.88,.72)
-        ]);
-        flowDots.forEach((dot, i) => {
-          const t = ((time*.00028 + i/flowDots.length) % 1);
-          dot.position.copy(curve.getPoint(t));
-          dot.scale.setScalar(.8 + Math.sin(time*.004 + i) * .18);
-        });
-      }
-      if(activeMode === "fault"){
-        faultRing.rotation.z += .018;
-        faultHalo.scale.setScalar(1 + Math.sin(time*.006) * .2);
-      }
-    }
-
-    function easeCamera(){
-      if(!targetCamera) return;
-      camera.position.lerp(targetCamera.pos, .055);
-      controls.target.lerp(targetCamera.tar, .07);
-      if(camera.position.distanceTo(targetCamera.pos) < .04 && controls.target.distanceTo(targetCamera.tar) < .03){
-        targetCamera = null;
-      }
-    }
-
-    function resize(){
-      const w = stage.clientWidth || 1;
-      const h = stage.clientHeight || 1;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    }
-    window.addEventListener("resize", resize);
-
-    renderer.domElement.setAttribute("data-render-ready", "true");
-    document.body.dataset.threeReady = "true";
-
-    function setupCellPrincipleLab(){
-      const cellStage = document.getElementById("cellStage");
-      if(!cellStage) return;
-
-      const cellScene = new THREE.Scene();
-      const cellCamera = new THREE.PerspectiveCamera(42, cellStage.clientWidth / cellStage.clientHeight, 0.1, 80);
-      cellCamera.position.set(4.9, 3.2, 6.2);
-
-      const cellRenderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-      cellRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      cellRenderer.setSize(cellStage.clientWidth, cellStage.clientHeight);
-      cellRenderer.shadowMap.enabled = true;
-      cellRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
-      cellStage.appendChild(cellRenderer.domElement);
-
-      const cellControls = new OrbitControls(cellCamera, cellRenderer.domElement);
-      cellControls.enableDamping = true;
-      cellControls.dampingFactor = .07;
-      cellControls.target.set(0, .25, 0);
-      cellControls.minDistance = 3.8;
-      cellControls.maxDistance = 11;
-
-      cellScene.add(new THREE.HemisphereLight(0xffffff, 0xc6d8e5, 2.4));
-      const cellKey = new THREE.DirectionalLight(0xffffff, 2.3);
-      cellKey.position.set(4, 6, 4);
-      cellKey.castShadow = true;
-      cellScene.add(cellKey);
-      const cellRim = new THREE.DirectionalLight(0x8ff1d0, 1.2);
-      cellRim.position.set(-4, 3, -4);
-      cellScene.add(cellRim);
-
-      const cellMats = {
-        casing: new THREE.MeshPhysicalMaterial({ color:0xe9f3f6, roughness:.18, metalness:.04, transparent:true, opacity:.28, transmission:.18, clearcoat:.8 }),
-        cathodeLfp: new THREE.MeshStandardMaterial({ color:0x19a77d, roughness:.34, metalness:.12 }),
-        cathodeNcm: new THREE.MeshStandardMaterial({ color:0x9a6be8, roughness:.34, metalness:.16 }),
-        anode: new THREE.MeshStandardMaterial({ color:0x1d6fbe, roughness:.36, metalness:.18 }),
-        separator: new THREE.MeshPhysicalMaterial({ color:0xffffff, roughness:.2, transparent:true, opacity:.72 }),
-        electrolyte: new THREE.MeshPhysicalMaterial({ color:0x9bd8e8, roughness:.05, transparent:true, opacity:.18, transmission:.2 }),
-        ion: new THREE.MeshBasicMaterial({ color:0x19a77d }),
-        electron: new THREE.MeshBasicMaterial({ color:0xf19a2a }),
-        wire: new THREE.MeshStandardMaterial({ color:0xf19a2a, roughness:.3, metalness:.45, emissive:0x2b1200, emissiveIntensity:.16 }),
-        risk: new THREE.MeshBasicMaterial({ color:0xff4d4d, transparent:true, opacity:.75 }),
-        label: new THREE.MeshStandardMaterial({ color:0x23364a, roughness:.45 })
-      };
-
-      const cellRoot = new THREE.Group();
-      cellScene.add(cellRoot);
-
-      const casing = new THREE.Mesh(roundedBox(4.4, 1.7, 2.6, .12), cellMats.casing);
-      casing.position.y = .55;
-      casing.castShadow = true;
-      casing.receiveShadow = true;
-      cellRoot.add(casing);
-
-      const cathode = new THREE.Mesh(roundedBox(.72, 1.28, 2.05, .07), cellMats.cathodeLfp);
-      cathode.name = "正极";
-      cathode.position.set(-1.22, .55, 0);
-      cathode.castShadow = true;
-      cellRoot.add(cathode);
-
-      const separator = new THREE.Mesh(new THREE.BoxGeometry(.12, 1.42, 2.22), cellMats.separator);
-      separator.name = "隔膜";
-      separator.position.set(0, .55, 0);
-      separator.castShadow = true;
-      cellRoot.add(separator);
-
-      const anode = new THREE.Mesh(roundedBox(.72, 1.28, 2.05, .07), cellMats.anode);
-      anode.name = "负极";
-      anode.position.set(1.22, .55, 0);
-      anode.castShadow = true;
-      cellRoot.add(anode);
-
-      const electrolyte = new THREE.Mesh(new THREE.BoxGeometry(3.3, 1.18, 1.9), cellMats.electrolyte);
-      electrolyte.position.set(0, .55, 0);
-      cellRoot.add(electrolyte);
-
-      const tabs = new THREE.Group();
-      const tabGeo = new THREE.BoxGeometry(.24, .48, .28);
-      const tab1 = new THREE.Mesh(tabGeo, cellMats.wire);
-      tab1.position.set(-1.22, 1.62, -.88);
-      const tab2 = new THREE.Mesh(tabGeo, cellMats.wire);
-      tab2.position.set(1.22, 1.62, .88);
-      tabs.add(tab1, tab2);
-      cellRoot.add(tabs);
-
-      const ionCurve = new THREE.CatmullRomCurve3([
-        new THREE.Vector3(-1.22,.72,-.78),
-        new THREE.Vector3(-.55,.84,-.38),
-        new THREE.Vector3(0,.72,0),
-        new THREE.Vector3(.55,.62,.38),
-        new THREE.Vector3(1.22,.74,.78)
-      ]);
-
-      const electronCurve = new THREE.CatmullRomCurve3([
-        new THREE.Vector3(1.22,1.62,.88),
-        new THREE.Vector3(1.65,2.25,1.32),
-        new THREE.Vector3(0,2.72,1.48),
-        new THREE.Vector3(-1.65,2.25,-1.32),
-        new THREE.Vector3(-1.22,1.62,-.88)
-      ]);
-
-      const wire = new THREE.Mesh(new THREE.TubeGeometry(electronCurve, 90, .035, 10, false), cellMats.wire);
-      wire.castShadow = true;
-      cellRoot.add(wire);
-
-      const ionDots = [];
-      for(let i=0;i<12;i++){
-        const dot = new THREE.Mesh(new THREE.SphereGeometry(.075,18,18), cellMats.ion);
-        dot.userData.offset = i / 12;
-        cellRoot.add(dot);
-        ionDots.push(dot);
-      }
-
-      const electronDots = [];
-      for(let i=0;i<10;i++){
-        const dot = new THREE.Mesh(new THREE.SphereGeometry(.06,16,16), cellMats.electron);
-        dot.userData.offset = i / 10;
-        cellRoot.add(dot);
-        electronDots.push(dot);
-      }
-
-      const riskGroup = new THREE.Group();
-      const riskRing = new THREE.Mesh(new THREE.TorusGeometry(.52,.025,12,76), cellMats.risk);
-      riskRing.position.set(.08,.55,0);
-      riskRing.rotation.y = Math.PI/2;
-      const riskHotspot = new THREE.Mesh(new THREE.SphereGeometry(.14,22,22), cellMats.risk);
-      riskHotspot.position.set(.08,.55,0);
-      riskGroup.add(riskRing, riskHotspot);
-      riskGroup.visible = false;
-      cellRoot.add(riskGroup);
-
-      const baseGrid = new THREE.GridHelper(7, 10, 0x85a7b7, 0xc5d7df);
-      baseGrid.position.y = -.04;
-      baseGrid.material.transparent = true;
-      baseGrid.material.opacity = .18;
-      cellScene.add(baseGrid);
-
-      const cellInfo = {
-        title: document.getElementById("cellInfoTitle"),
-        text: document.getElementById("cellInfoText"),
-        ion: document.getElementById("ionDirection"),
-        electron: document.getElementById("electronDirection"),
-        question: document.getElementById("classQuestion")
-      };
-
-      const cellModes = {
-        charge: {
-          title:"充电过程：锂离子从正极嵌入负极",
-          text:"充电时，锂离子从正极材料脱出，经电解液穿过隔膜嵌入负极石墨；电子经外部电路到达负极，电能被转化为化学能储存。",
-          ion:"正极 → 负极",
-          electron:"外部电路 → 负极",
-          question:"为什么电子不能直接穿过电解液和隔膜？",
-          cathode:"lfp",
-          direction:1,
-          risk:false
-        },
-        discharge: {
-          title:"放电过程：电子经负载输出电能",
-          text:"放电时，锂离子从负极脱出回到正极；电子从负极经外部负载流向正极，为电机控制器和车载系统提供电能。",
-          ion:"负极 → 正极",
-          electron:"负极 → 外部负载 → 正极",
-          question:"为什么离子在电池内部流动，而电子必须走外部电路？",
-          cathode:"lfp",
-          direction:-1,
-          risk:false
-        },
-        lfp: {
-          title:"磷酸铁锂 LFP：安全、长寿命、低成本",
-          text:"LFP 使用磷酸铁锂作为正极材料，热稳定性和循环寿命更突出，适合讲解安全边界、低成本和BMS均衡策略。",
-          ion:"嵌入/脱嵌机理不变",
-          electron:"外部电路完成能量交换",
-          question:"为什么LFP适合做安全性和循环寿命教学案例？",
-          cathode:"lfp",
-          direction:.65,
-          risk:false
-        },
-        ncm: {
-          title:"三元锂 NCM/NCA：高能量密度与热管理",
-          text:"三元锂正极包含镍、钴、锰或铝等元素，能量密度更高，适合讲解续航优势、低温表现与热管理要求。",
-          ion:"嵌入/脱嵌机理不变",
-          electron:"外部电路完成能量交换",
-          question:"能量密度提升为什么会带来更高的热管理要求？",
-          cathode:"ncm",
-          direction:.8,
-          risk:false
-        },
-        risk: {
-          title:"热风险诊断：过充、短路与隔膜损伤",
-          text:"当过充、高温、短路或隔膜损伤出现时，电芯可能发生热失控。实训中可让学生定位隔膜、电解液和BMS采样异常。",
-          ion:"异常堆积 / 内短路风险",
-          electron:"短路路径失控",
-          question:"BMS应如何通过电压、温度和绝缘数据提前预警？",
-          cathode:"ncm",
-          direction:1.15,
-          risk:true
-        }
-      };
-
-      let activeCellMode = "charge";
-      let cellDirection = 1;
-
-      function setCellMode(mode){
-        activeCellMode = mode;
-        const cfg = cellModes[mode];
-        cellDirection = cfg.direction;
-        cathode.material = cfg.cathode === "ncm" ? cellMats.cathodeNcm : cellMats.cathodeLfp;
-        riskGroup.visible = cfg.risk;
-        cellInfo.title.textContent = cfg.title;
-        cellInfo.text.textContent = cfg.text;
-        cellInfo.ion.textContent = cfg.ion;
-        cellInfo.electron.textContent = cfg.electron;
-        cellInfo.question.textContent = cfg.question;
-        document.querySelectorAll(".cell-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.cellMode === mode));
-      }
-
-      document.querySelectorAll(".cell-btn").forEach(btn => btn.addEventListener("click", () => setCellMode(btn.dataset.cellMode)));
-      setCellMode("charge");
-
-      function resizeCell(){
-        const w = cellStage.clientWidth || 1;
-        const h = cellStage.clientHeight || 1;
-        cellCamera.aspect = w / h;
-        cellCamera.updateProjectionMatrix();
-        cellRenderer.setSize(w, h);
-      }
-      window.addEventListener("resize", resizeCell);
-
-      cellRenderer.domElement.setAttribute("data-principle-render-ready", "true");
-      document.body.dataset.principleReady = "true";
-
-      function cellTick(time){
-        requestAnimationFrame(cellTick);
-        const speed = activeCellMode === "risk" ? .00042 : .00025;
-        ionDots.forEach((dot, idx) => {
-          let t = (time * speed + dot.userData.offset) % 1;
-          if(cellDirection < 0) t = 1 - t;
-          dot.position.copy(ionCurve.getPoint(t));
-          dot.scale.setScalar(1 + Math.sin(time * .006 + idx) * .14);
-        });
-        electronDots.forEach((dot, idx) => {
-          let t = (time * speed * 1.25 + dot.userData.offset) % 1;
-          if(cellDirection > 0) t = 1 - t;
-          dot.position.copy(electronCurve.getPoint(t));
-        });
-        if(riskGroup.visible){
-          riskRing.rotation.z += .022;
-          riskHotspot.scale.setScalar(1.05 + Math.sin(time * .008) * .28);
-          separator.material.opacity = .45 + Math.sin(time * .006) * .14;
-        }else{
-          separator.material.opacity = .72;
-        }
-        cellRoot.rotation.y += .00045;
-        cellControls.update();
-        cellRenderer.render(cellScene, cellCamera);
-      }
-      cellTick(0);
-    }
-
-    setupCellPrincipleLab();
-
-    function tick(time){
-      requestAnimationFrame(tick);
-      animateParts(time);
-      easeCamera();
-      root.rotation.y += activeMode === "assemble" ? .0012 : .0005;
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    tick(0);
-  </script>
 </body>
 </html>

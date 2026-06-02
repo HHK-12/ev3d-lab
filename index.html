@@ -583,6 +583,90 @@
     .price ul{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:7px}
     .price li{font-size:13px;color:#52647a;display:flex;gap:7px;align-items:flex-start}
 
+    .principle-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:12px;
+      align-items:stretch;
+    }
+
+    .principle-card{
+      border:1px solid rgba(63,91,124,.13);
+      border-radius:8px;
+      background:rgba(255,255,255,.58);
+      padding:16px;
+    }
+
+    .principle-card h3{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:0 0 12px;
+      font-size:17px;
+      color:#18324c;
+    }
+
+    .principle-flow{
+      display:grid;
+      gap:9px;
+    }
+
+    .flow-line{
+      display:grid;
+      grid-template-columns:72px 1fr;
+      gap:10px;
+      align-items:start;
+      padding:10px;
+      border:1px solid rgba(63,91,124,.11);
+      border-radius:7px;
+      background:rgba(255,255,255,.5);
+    }
+
+    .flow-line strong{
+      color:#0f766e;
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    .flow-line span{
+      color:#52647a;
+      font-size:13px;
+      line-height:1.65;
+    }
+
+    .compare-table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border:1px solid rgba(63,91,124,.13);
+      border-radius:8px;
+      background:rgba(255,255,255,.52);
+      font-size:13px;
+    }
+
+    .compare-table th,.compare-table td{
+      padding:10px 11px;
+      border-bottom:1px solid rgba(63,91,124,.1);
+      text-align:left;
+      vertical-align:top;
+      line-height:1.55;
+    }
+
+    .compare-table th{
+      background:rgba(24,151,184,.1);
+      color:#17304a;
+      font-weight:850;
+    }
+
+    .compare-table tr:last-child td{border-bottom:0}
+    .source-note{
+      margin:12px 0 0;
+      color:#738296;
+      font-size:12px;
+      line-height:1.6;
+    }
+
     .roadmap{
       display:grid;
       grid-template-columns:repeat(4,1fr);
@@ -649,6 +733,7 @@
       .grid-3,.grid-4,.roadmap{grid-template-columns:1fr}
       .content-section{padding:18px}
       .content-head{display:block}
+      .principle-grid{grid-template-columns:1fr}
       .canvas-overlay,.canvas-bottom{left:10px;right:10px}
       .canvas-bottom{align-items:flex-end}
       .segment{max-width:100%;overflow:auto}
@@ -682,6 +767,7 @@
       </a>
       <nav class="nav" aria-label="页面导航">
         <a href="#modules"><i data-lucide="layers-3"></i>实训模块</a>
+        <a href="#battery-principle"><i data-lucide="atom"></i>电池原理</a>
         <a href="#pricing"><i data-lucide="circle-dollar-sign"></i>版本定价</a>
         <a href="#roadmap"><i data-lucide="route"></i>落地路径</a>
         <a href="#business"><i data-lucide="briefcase-business"></i>商业价值</a>
@@ -698,7 +784,7 @@
           <div>
             <div class="eyebrow"><i data-lucide="graduation-cap"></i> 新能源三电系统 · 虚拟仿真实训 · 教学考核闭环</div>
             <h2>把看不见、拆不起、有风险的新能源实训变成可交互课堂。</h2>
-            <p>面向中职、高职、技师学院，覆盖动力电池、BMS、电机电控、高压安全与故障诊断，帮助学校用更低成本建设可复制的数字实训能力。</p>
+            <p>面向中职、高职、技师学院，把锂离子电池“正负极嵌入/脱嵌、离子迁移、电子外电路流动、BMS监测、热失控风险”做成可观察、可拆解、可考核的课堂实训。</p>
           </div>
           <div class="metrics" aria-label="核心商业指标">
             <div class="metric"><strong>8-80万</strong><span>单校产品与实训室客单价</span></div>
@@ -713,7 +799,7 @@
             <div class="module-list">
               <button class="module active" data-focus="battery" title="聚焦动力电池包">
                 <div class="module-head"><h3>动力电池包</h3><i data-lucide="battery-full"></i></div>
-                <p>电芯、模组、箱体、采样线束、热管理结构。</p>
+                <p>正极、负极、隔膜、电解液、电芯模组与热管理结构。</p>
                 <div class="progress" style="--value:92%"><i></i></div>
               </button>
               <button class="module" data-focus="motor" title="聚焦电机电控">
@@ -734,7 +820,7 @@
             <div class="control-group">
               <button class="mode-btn active" data-mode="assemble" title="显示完整装配结构"><i data-lucide="box"></i>装配</button>
               <button class="mode-btn" data-mode="explode" title="显示分层拆解结构"><i data-lucide="unfold-horizontal"></i>拆解</button>
-              <button class="mode-btn" data-mode="flow" title="显示高压能量路径"><i data-lucide="cable"></i>高压</button>
+              <button class="mode-btn" data-mode="flow" title="显示锂离子与电子流动路径"><i data-lucide="cable"></i>充放电</button>
               <button class="mode-btn" data-mode="fault" title="显示故障定位"><i data-lucide="scan-search"></i>故障</button>
             </div>
             <p class="mobile-note">模型支持触控旋转、缩放与按钮切换。</p>
@@ -743,9 +829,9 @@
           <div class="panel-block">
             <h2 class="section-title"><span><i data-lucide="clipboard-check"></i>课堂任务</span></h2>
             <div class="task-list">
-              <div class="task"><span class="check"><i data-lucide="check"></i></span><div><h4>识别电池包高压接口</h4><p>结构认知</p></div><span class="score">98</span></div>
-              <div class="task"><span class="check"><i data-lucide="check"></i></span><div><h4>完成维修断电流程</h4><p>高压安全</p></div><span class="score">92</span></div>
-              <div class="task"><span class="check"><i data-lucide="check"></i></span><div><h4>定位BMS通讯异常</h4><p>故障诊断</p></div><span class="score">86</span></div>
+              <div class="task"><span class="check"><i data-lucide="check"></i></span><div><h4>标注正极/负极/隔膜</h4><p>电芯结构</p></div><span class="score">98</span></div>
+              <div class="task"><span class="check"><i data-lucide="check"></i></span><div><h4>说明充电离子迁移方向</h4><p>工作原理</p></div><span class="score">92</span></div>
+              <div class="task"><span class="check"><i data-lucide="check"></i></span><div><h4>判断LFP与三元锂差异</h4><p>材料特性</p></div><span class="score">86</span></div>
             </div>
           </div>
         </aside>
@@ -754,8 +840,8 @@
           <div id="modelStage" class="canvas-stage"></div>
           <div class="canvas-overlay">
             <div class="model-label">
-              <h3 id="modelTitle">动力电池包三维实训模型</h3>
-              <p id="modelText">电芯模组、冷却板、高压连接器与BMS采样线束分层呈现，适合课堂讲解、虚拟拆装与考核任务。</p>
+              <h3 id="modelTitle">锂离子电池包原理实训模型</h3>
+              <p id="modelText">从电芯正负极、隔膜、电解液到模组、BMS与高压连接器，逐层讲解“锂离子走电解液，电子走外电路”的基本原理。</p>
             </div>
             <div class="status-stack">
               <span class="status-pill"><i class="status-dot"></i> Web3D 运行中</span>
@@ -778,18 +864,18 @@
           <div class="panel-block">
             <h2 class="section-title"><span><i data-lucide="activity"></i>实时数据</span><em class="chip">仿真</em></h2>
             <div class="telemetry">
-              <div class="telemetry-row"><span>电池包总压</span><strong id="voltage">356.8 V</strong></div>
-              <div class="telemetry-row"><span>SOC</span><strong id="soc">68%</strong></div>
-              <div class="telemetry-row"><span>绝缘电阻</span><strong id="resistance">2.4 MΩ</strong></div>
-              <div class="telemetry-row alert"><span>当前故障码</span><strong id="faultCode">P0A1F</strong></div>
+              <div class="telemetry-row"><span>电池体系</span><strong id="voltage">LFP / 三元锂</strong></div>
+              <div class="telemetry-row"><span>正极材料</span><strong id="soc">LiFePO4 / NCM</strong></div>
+              <div class="telemetry-row"><span>离子迁移</span><strong id="resistance">充电: 正→负</strong></div>
+              <div class="telemetry-row alert"><span>外部电子</span><strong id="faultCode">放电: 负→正</strong></div>
             </div>
           </div>
 
           <div class="panel-block">
             <h2 class="section-title"><span><i data-lucide="triangle-alert"></i>故障案例</span></h2>
             <div class="fault-card">
-              <div class="code"><i data-lucide="scan-line"></i>P0A1F · BMS 通讯异常</div>
-              <p>系统在三维模型中标记采样线束与BMS控制单元，学生按标准流程完成断电、测量、定位与复核。</p>
+              <div class="code"><i data-lucide="scan-line"></i>热失控风险 · 过充/短路/高温</div>
+              <p>三元锂能量密度高但热稳定性更敏感；磷酸铁锂安全性、循环寿命和成本更有优势。系统用故障标记训练学生识别风险部位。</p>
             </div>
           </div>
 
@@ -805,6 +891,42 @@
         </aside>
       </section>
 
+      <section id="battery-principle" class="content-section">
+        <div class="content-head">
+          <div>
+            <div class="eyebrow"><i data-lucide="atom"></i> 电池原理课堂</div>
+            <h2>把锂离子电池讲成学生能看见的“离子流 + 电子流”。</h2>
+            <p>根据《汽车电池技术——新能源汽车电池分类及特性》的电池分类与特性内容，EV3D Lab 将动力电池原理拆成结构认知、充放电路径、材料对比和安全诊断四类实训。</p>
+          </div>
+        </div>
+        <div class="principle-grid">
+          <article class="principle-card">
+            <h3><i data-lucide="repeat"></i>锂离子电池充放电路径</h3>
+            <div class="principle-flow">
+              <div class="flow-line"><strong>核心原理</strong><span>锂离子在正极和负极之间往返迁移，电子不穿过电解液，而是通过外部电路流动，形成可用电流。</span></div>
+              <div class="flow-line"><strong>充电时</strong><span>锂离子从正极材料脱出，经电解液穿过隔膜嵌入负极石墨；电子经外部电路到达负极，完成能量存储。</span></div>
+              <div class="flow-line"><strong>放电时</strong><span>锂离子从负极脱出回到正极；电子从负极经外部负载流向正极，为电机控制器、车载电器等提供能量。</span></div>
+              <div class="flow-line"><strong>实训重点</strong><span>学生需要能在三维模型中指出正极、负极、隔膜、电解液、BMS采样线束和高压连接器，并解释离子/电子路径不同。</span></div>
+            </div>
+          </article>
+          <article class="principle-card">
+            <h3><i data-lucide="table-2"></i>LFP 与三元锂教学对比</h3>
+            <table class="compare-table" aria-label="磷酸铁锂与三元锂电池对比">
+              <thead>
+                <tr><th>项目</th><th>磷酸铁锂 LFP</th><th>三元锂 NCM/NCA</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>正极材料</td><td>磷酸铁锂 LiFePO4</td><td>镍钴锰或镍钴铝三元材料</td></tr>
+                <tr><td>课堂关键词</td><td>安全、长寿命、低成本</td><td>高能量密度、续航、低温表现</td></tr>
+                <tr><td>安全特性</td><td>热稳定性较好，过充和高温下风险相对低</td><td>液态电解质与高镍材料对热失控更敏感</td></tr>
+                <tr><td>实训任务</td><td>循环寿命评估、低温容量衰减、BMS均衡</td><td>能量密度分析、热管理、过充风险识别</td></tr>
+              </tbody>
+            </table>
+            <p class="source-note">延伸讲解：钠离子电池工作机理与锂离子相似，但能量密度仍受限制；固态电池通过固态电解质改善安全边界，是后续课程可扩展方向。</p>
+          </article>
+        </div>
+      </section>
+
       <section id="modules" class="content-section">
         <div class="content-head">
           <div>
@@ -814,7 +936,7 @@
           </div>
         </div>
         <div class="grid-3">
-          <article class="feature"><div class="icon"><i data-lucide="battery-charging"></i></div><h3>动力电池与BMS</h3><p>电芯、模组、采样、电池管理、热管理、高压连接器与检修流程。</p></article>
+          <article class="feature"><div class="icon"><i data-lucide="battery-charging"></i></div><h3>动力电池与BMS</h3><p>正极、负极、隔膜、电解液、电芯模组、BMS采样、电池均衡与热管理。</p></article>
           <article class="feature"><div class="icon"><i data-lucide="cog"></i></div><h3>电机与电控</h3><p>驱动电机、逆变器、电控信号、能量流与常见控制故障。</p></article>
           <article class="feature"><div class="icon"><i data-lucide="shield-check"></i></div><h3>高压安全</h3><p>维修断电、绝缘检测、高压互锁、上电流程和风险步骤考核。</p></article>
         </div>
@@ -1091,24 +1213,24 @@
 
     const modes = {
       assemble: {
-        title:"动力电池包三维实训模型",
-        text:"电芯模组、冷却板、高压连接器与BMS采样线束分层呈现，适合课堂讲解、虚拟拆装与考核任务。",
-        voltage:"356.8 V", soc:"68%", resistance:"2.4 MΩ", fault:"无"
+        title:"锂离子电池包原理实训模型",
+        text:"从电芯正负极、隔膜、电解液到模组、BMS与高压连接器，逐层讲解“锂离子走电解液，电子走外电路”的基本原理。",
+        voltage:"LFP / 三元锂", soc:"LiFePO4 / NCM", resistance:"离子: 正负极往返", fault:"电子: 外电路流动"
       },
       explode: {
-        title:"分层拆解训练",
-        text:"上盖、托盘、电芯模组、BMS、连接器与高压配电盒分层展开，学生按任务完成拆装路径。",
-        voltage:"安全断电", soc:"--", resistance:"待检测", fault:"--"
+        title:"电芯结构分层拆解训练",
+        text:"上盖、托盘、电芯模组、BMS、连接器与高压配电盒分层展开，教师可讲解正极、负极、隔膜和电解液在电芯中的位置关系。",
+        voltage:"结构拆解", soc:"正极/负极/隔膜", resistance:"BMS采样线束", fault:"高压连接器"
       },
       flow: {
-        title:"高压上电路径",
-        text:"橙色线束显示电池包到高压配电盒、电机控制器与驱动电机的能量路径，适合讲解高压互锁。",
-        voltage:"402.1 V", soc:"71%", resistance:"2.6 MΩ", fault:"--"
+        title:"充放电路径可视化",
+        text:"充电时锂离子从正极脱出并嵌入负极石墨；放电时锂离子回到正极，电子经外部负载流动并输出电能。",
+        voltage:"充电: Li+ 正→负", soc:"放电: Li+ 负→正", resistance:"电子: 外部电路", fault:"能量: 化学能⇄电能"
       },
       fault: {
-        title:"BMS通讯异常定位",
-        text:"故障标记聚焦BMS控制单元与采样线束，课堂可按断电、测量、定位、复核流程进行考核。",
-        voltage:"356.8 V", soc:"68%", resistance:"2.4 MΩ", fault:"P0A1F"
+        title:"热失控与BMS异常诊断",
+        text:"故障标记聚焦BMS控制单元与采样线束，引导学生分析过充、短路、高温和热失控风险，并比较LFP与三元锂安全特性。",
+        voltage:"风险: 过充/短路", soc:"LFP: 热稳定较好", resistance:"三元: 能量密度高", fault:"P0A1F"
       }
     };
 
